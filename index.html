@@ -8,23 +8,23 @@
         <style>
 
     html body {
-        font-family: '', sans-serif;
-        background-color: white;
+        font-family: 'Mina', sans-serif;
+        background-color: #f5f5f5;
     }
 
     :root {
-        --accent: #2196F3;
+        --accent: #005580;
         --border-width:  0 ;
     }
 
 </style>
 
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mina">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=VT323">
 
 
-
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/lakeside-light.min.css"> 
 
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -39,6 +39,20 @@
 
 
  
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/bash.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/go.min.js"></script>
+    
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
 
 
 
@@ -87,24 +101,24 @@ $(document).ready(function(){
         
 
     
-    <link rel="apple-touch-icon" sizes="180x180" href="https://keanrawr.github.io/img/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://keanrawr.github.io/img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://keanrawr.github.io/img/favicon/favicon-16x16.png">
-    <link rel="manifest" href="https://keanrawr.github.io/img/favicon/site.webmanifest">
-    <link rel="mask-icon" href="https://keanrawr.github.io/img/favicon/safari-pinned-tab.svg" color="#000000">
-    <link rel="shortcut icon" href="https://keanrawr.github.io/img/favicon/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://keanrawr.github.ioimg/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://keanrawr.github.ioimg/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://keanrawr.github.ioimg/favicon/favicon-16x16.png">
+    <link rel="manifest" href="https://keanrawr.github.ioimg/favicon/site.webmanifest">
+    <link rel="mask-icon" href="https://keanrawr.github.ioimg/favicon/safari-pinned-tab.svg" color="#000000">
+    <link rel="shortcut icon" href="https://keanrawr.github.ioimg/favicon/favicon.ico">
     <meta name="msapplication-TileColor" content="#2b5797">
-    <meta name="msapplication-config" content="https://keanrawr.github.io/img/favicon/browserconfig.xml">
+    <meta name="msapplication-config" content="https://keanrawr.github.ioimg/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
     
     
     
     <meta property="og:title" content="Kean Rawr">
     <meta property="og:type" content="website">
-    <meta property="description" content="">
-    <meta property="og:description" content="">
+    <meta property="description" content="Always wanted to have a blog, but was too young to have one. So here goes nothing.">
+    <meta property="og:description" content="Always wanted to have a blog, but was too young to have one. So here goes nothing.">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:image" content="https://keanrawr.github.io/" >
+    <meta name="twitter:image" content="https://keanrawr.github.ioprofile.png" >
     
     <meta name="twitter:creator" content="">
     <meta name="twitter:site" content="">
@@ -131,6 +145,40 @@ $(document).ready(function(){
                 </div>
                 <div class="collapse navbar-collapse">
                     
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/post/">Posts</a></li>
+                            
+                                <li><a href="/project/">Projects</a></li>
+                            
+                                <li><a href="/tags/">Tags</a></li>
+                            
+                        </ul>
+                    
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="the.keanraw@gmail.com"><i class="far fa-envelope"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://github.com/keanrawr/"><i class="fab fa-github"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://twitter.com/KeanRawr/"><i class="fab fa-twitter"></i></a></li>
+                            
+                                <li class="navbar-icon"><a href="https://www.linkedin.com/in/antonio-herrera-98b088124/"><i class="fab fa-linkedin"></i></a></li>
+                            
+                            <li id="night-mode-toggle">
+    <input type="checkbox" id = "button-status"
+        data-toggle="toggle"
+        data-width = "10"
+        data-height = "1"
+        data-on="<i class='far fa-moon fa-lg'></i>"
+        data-off= "<i class='far fa-sun fa-lg'></i>"
+        data-style="ios"
+        data-onstyle = "default">
+</li>
+                        </ul>
                     
                 </div>
             </div>
@@ -142,13 +190,13 @@ $(document).ready(function(){
     <div class="intro">
 
         <div class="avatar">
-            <img class="img-responsive" src="https://keanrawr.github.io/img/" alt="Whoopsies, this is my bad side!" style = "margin: 0 auto;">
+            <img class="img-responsive" src="https://keanrawr.github.ioimg/profile.png" alt="Whoopsies, this is my bad side!" style = "margin: 0 auto;">
             <h1>Kean Rawr</h1>
         </div>
         
         
         <div style = "margin-top: 50px">
-            <h2></h2>
+            <h2>Always wanted to have a blog, but was too young to have one. So here goes nothing.</h2>
         </div>
     </div>
 
