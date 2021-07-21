@@ -2,63 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://keanrawr.github.io/project/project1/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+    <loc>https://example.com/about/</loc>
+    <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://keanrawr.github.io/project/project2/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+    <loc>https://example.com/p/first-post/</loc>
+    <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://keanrawr.github.io/project/project3/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+    <loc>https://example.com/</loc>
+    <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://keanrawr.github.io/project/project4/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+    <loc>https://example.com/page/</loc>
+    <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://keanrawr.github.io/</loc>
-    <lastmod>2021-04-11T00:00:00+00:00</lastmod>
+    <loc>https://example.com/tags/personal/</loc>
+    <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://keanrawr.github.io/2021/04/11/my-first-blog-post/</loc>
-    <lastmod>2021-04-11T00:00:00+00:00</lastmod>
+    <loc>https://example.com/post/</loc>
+    <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://keanrawr.github.io/tags/personal/</loc>
-    <lastmod>2021-04-11T00:00:00+00:00</lastmod>
+    <loc>https://example.com/tags/</loc>
+    <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://keanrawr.github.io/post/</loc>
-    <lastmod>2021-04-11T00:00:00+00:00</lastmod>
+    <loc>https://example.com/archives/</loc>
+    <lastmod>2019-05-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://keanrawr.github.io/tags/</loc>
-    <lastmod>2021-04-11T00:00:00+00:00</lastmod>
+    <loc>https://example.com/categories/</loc>
   </url><url>
-    <loc>https://keanrawr.github.io/tags/api/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+    <loc>https://example.com/search/</loc>
   </url><url>
-    <loc>https://keanrawr.github.io/tags/aws/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://keanrawr.github.io/tags/data/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://keanrawr.github.io/tags/etl/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://keanrawr.github.io/tags/html/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://keanrawr.github.io/tags/javascript/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://keanrawr.github.io/tags/nlp/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://keanrawr.github.io/project/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://keanrawr.github.io/tags/python/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://keanrawr.github.io/tags/r/</loc>
-    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://keanrawr.github.io/categories/</loc>
+    <loc>https://example.com/categories/test/</loc>
   </url>
 </urlset>
