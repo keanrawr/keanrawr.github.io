@@ -2,25 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</loc>
+    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/</loc>
+    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/machine-learning/</loc>
+    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/post/</loc>
+    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/raspberrypi/</loc>
+    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/</loc>
+    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://example.com/about/</loc>
     <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://example.com/p/first-post/</loc>
     <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/</loc>
-    <lastmod>2021-07-20T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://example.com/page/</loc>
     <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/personal/</loc>
-    <lastmod>2021-07-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://example.com/post/</loc>
-    <lastmod>2021-07-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://example.com/tags/</loc>
     <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://example.com/archives/</loc>

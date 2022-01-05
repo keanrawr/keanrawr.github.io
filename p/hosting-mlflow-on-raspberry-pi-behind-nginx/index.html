@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Self hosting mlflow server in a raspberry pi'><title>Hosting mlflow on Raspberry Pi Behind nginx</title>
+
+<link rel='canonical' href='https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Hosting mlflow on Raspberry Pi Behind nginx'>
+<meta property='og:description' content='Self hosting mlflow server in a raspberry pi'>
+<meta property='og:url' content='https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/'>
+<meta property='og:site_name' content='Kean Rawr'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='raspberrypi' /><meta property='article:tag' content='machine learning' /><meta property='article:published_time' content='2022-01-04T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2022-01-04T00:00:00&#43;00:00'/><meta property='og:image' content='https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/banner.png' />
+<meta name="twitter:site" content="@KeanRawr">
+    <meta name="twitter:creator" content="@KeanRawr"><meta name="twitter:title" content="Hosting mlflow on Raspberry Pi Behind nginx">
+<meta name="twitter:description" content="Self hosting mlflow server in a raspberry pi"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/banner.png' />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7859P9KGNF"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7859P9KGNF', { 'anonymize_ip': false });
+}
+</script>
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="https://example.com" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/">
+                <img src="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/banner_hu1e9798d7e5cf567e46abb69a070566d3_315645_800x0_resize_box_3.png"
+                        srcset="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/banner_hu1e9798d7e5cf567e46abb69a070566d3_315645_800x0_resize_box_3.png 800w, /p/hosting-mlflow-on-raspberry-pi-behind-nginx/banner_hu1e9798d7e5cf567e46abb69a070566d3_315645_1600x0_resize_box_3.png 1600w"
+                        width="800" 
+                        height="268" 
+                        loading="lazy"
+                        alt="Featured image of post Hosting mlflow on Raspberry Pi Behind nginx" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/">Hosting mlflow on Raspberry Pi Behind nginx</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        Self hosting mlflow server in a raspberry pi
+    </h3>
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Jan 04, 2022</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <h1 id="why-you-need-to-track-experiments">Why you need to track experiments</h1>
+<p>As data scientists or Machine Learning engineers one of the most overlook things is &ldquo;model lineage&rdquo;, that is, being able to track the data and hyper parameters used to produce a model. This helps ensure reproducibility, which is really important for a number of reasons.</p>
+<p><a class="link" href="https://mlflow.org/"  target="_blank" rel="noopener"
+    >mlflow</a> isn&rsquo;t the only tool that helps us track experiments, but is the one I like the most, other tools for experiment tracking are: <a class="link" href="https://www.comet.ml/site/"  target="_blank" rel="noopener"
+    >comet.ml</a>, <a class="link" href="https://www.tensorflow.org/tensorboard"  target="_blank" rel="noopener"
+    >tensorboard</a>, <a class="link" href="https://dvc.org/"  target="_blank" rel="noopener"
+    >dvc</a>. All of the previous list, minus DVC, have a GUI to explore results, DVC is more like a git complement and is my favorite from the list.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>For this build you&rsquo;ll need:</p>
+<ul>
+<li>A raspberry pi with Raspberry Pi OS installed</li>
+<li>Docker installed in your raspberry pi. It&rsquo;s really easy to set up, follow the <a class="link" href="https://docs.docker.com/engine/install/debian/"  target="_blank" rel="noopener"
+    >official Docker install guide for debian</a></li>
+<li>Python3 installed in your raspberry pi</li>
+<li>*python virtual env to isolate the requirements for the server</li>
+<li>*an aws account</li>
+</ul>
+<blockquote>
+<p>* optional requirements</p>
+</blockquote>
+<h2 id="what-well-be-setting-up">What we&rsquo;ll be setting up</h2>
+<p>There are three main parts to an mlflow server:</p>
+<ul>
+<li><strong>The server UI</strong>: This is the flask web application that lets you interact with the experiments that have been run.</li>
+<li><strong>Backend storage</strong>: Place where the experiments, runs, metrics and parameters are stored. It can be local file storage, but in order to use the <a class="link" href="https://www.mlflow.org/docs/latest/model-registry.html"  target="_blank" rel="noopener"
+    >mlflow model registry</a> we need to use a relational database, in our case that&rsquo;s postgres.</li>
+<li><strong>Artifact storage</strong>: We need a place for artifacts, such as the serialized model, or a plot that you want to save. This can also be locally stored, but we&rsquo;ll see an optional aws s3 storage solution.</li>
+</ul>
+<p>In the end this is what we&rsquo;ll be building.</p>
+<p><figure style="flex-grow: 166; flex-basis: 399px">
+		<a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/diagram.png" data-size="3004x1804"><img src="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/diagram.png"
+				srcset="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/diagram_hu1b0d754b0fc1b2df71f890cd71f7c922_352485_480x0_resize_box_3.png 480w, /p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/diagram_hu1b0d754b0fc1b2df71f890cd71f7c922_352485_1024x0_resize_box_3.png 1024w"
+				width="3004"
+				height="1804"
+				loading="lazy"
+				alt="diagram">
+		</a>
+		
+		<figcaption>diagram</figcaption>
+		
+	</figure></p>
+<h2 id="setting-up-backend-storage">Setting up backend storage</h2>
+<p>Docker is a great tool because it lets us deploy a number of tools fast and easy, plus it has a lot of official images, one of which is postgres. To run a postgres docker container there are a couple of things that we need to define, the basic syntax is:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker run -d --name container-name <span class="se">\
+</span><span class="se"></span>  -e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>mysecretpassword <span class="se">\
+</span><span class="se"></span>  postgres
+</code></pre></div><p>The only required environment variable is <code>POSTGRES_PASSWORD</code>, the default user name is &ldquo;postgres&rdquo; and the default database name is whatever the user is, you can learn more about the docker image in the <a class="link" href="https://hub.docker.com/_/postgres"  target="_blank" rel="noopener"
+    >official documentation</a>. This is good enough to get you started, but we suggest you declare at least a couple more arguments:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker run -d -p 5432:5432 <span class="se">\
+</span><span class="se"></span>  --name mlflow-backend <span class="se">\
+</span><span class="se"></span>  --restart unless-stopped <span class="se">\
+</span><span class="se"></span>  -e <span class="nv">POSTGRES_USER</span><span class="o">=</span>mlflow <span class="se">\
+</span><span class="se"></span>  -e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>supersecretpassword <span class="se">\
+</span><span class="se"></span>  -e <span class="nv">POSTGRES_DB</span><span class="o">=</span>mlflow <span class="se">\
+</span><span class="se"></span>  postgres:14
+</code></pre></div><p>Let&rsquo;s break the command down:</p>
+<ul>
+<li><code>-d</code> runs the container in detached mode</li>
+<li><code>-p</code> specifies port mappings, it&rsquo;s always a good practice to specify this in case you want to specify a different port</li>
+<li><code>--name</code> gives our docker image a name to find it when using the <code>docker ps</code> command</li>
+<li><code>--restart unless-stopped</code> makes sure that our container is always up, even when rebooting the pi</li>
+<li><code>POSTGRES_USER</code>, <code>POSTGRES_PASSWORD</code> and <code>POSTGRES_DB</code> are all postgres related variables. Make sure to choose a good password.</li>
+<li><code>postgres:14</code> the name of the image to use, it&rsquo;s always a good practice to specify the tag you want to use, in case the latest version of the image has breaking changes.</li>
+</ul>
+<h2 id="optional-set-up-s3-artifact-storage">(Optional) Set up s3 artifact storage</h2>
+<p>This is an optional step to use s3 as our artifact storage, we&rsquo;ll be setting up 3 things:</p>
+<ul>
+<li>S3 bucket</li>
+<li>aws user with access to the bucket</li>
+<li>aws cli credentials in the raspberry pi</li>
+</ul>
+<h3 id="creating-s3-bucket">Creating s3 bucket</h3>
+<p>In your aws console go to the s3 console, you can use the search bar or in the &ldquo;All services&rdquo; part of the console. Once in the s3 console click on the &ldquo;Create bucket&rdquo; button.</p>
+<p><figure style="flex-grow: 213; flex-basis: 513px">
+		<a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-console.png" data-size="2880x1346"><img src="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-console.png"
+				srcset="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-console_hu1c136b503fe6d9acba137b6fa7b90da6_267979_480x0_resize_box_3.png 480w, /p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-console_hu1c136b503fe6d9acba137b6fa7b90da6_267979_1024x0_resize_box_3.png 1024w"
+				width="2880"
+				height="1346"
+				loading="lazy"
+				alt="s3-console">
+		</a>
+		
+		<figcaption>s3-console</figcaption>
+		
+	</figure></p>
+<p>Choose a name and region for your bucket. For the bucket name choose a descriptive name, bucket names need to be unique across aws regions, so you might need to give it a couple of tries. For the region, choose the closest one to you. Leave everything else with the default settings and click on &ldquo;Create bucket&rdquo; at the bottom of the page.</p>
+<p><figure style="flex-grow: 191; flex-basis: 459px">
+		<a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-create.png" data-size="1692x884"><img src="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-create.png"
+				srcset="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-create_hu6a845bdf88dbab4058273d5ddbd66bed_138694_480x0_resize_box_3.png 480w, /p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-create_hu6a845bdf88dbab4058273d5ddbd66bed_138694_1024x0_resize_box_3.png 1024w"
+				width="1692"
+				height="884"
+				loading="lazy"
+				alt="s3-create">
+		</a>
+		
+		<figcaption>s3-create</figcaption>
+		
+	</figure></p>
+<blockquote>
+<p><strong>Note:</strong> You don&rsquo;t need a new bucket for this, in my case I have a bucket that I use for miscellaneous things and just use a different root for each use case.</p>
+</blockquote>
+<h3 id="create-an-aws-user-to-access-the-bucket">Create an aws user to access the bucket</h3>
+<p>Navigate to the IAM console, in the side menu there&rsquo;s an &ldquo;Users&rdquo; menu item. Once there click on the &ldquo;Add users&rdquo; button.</p>
+<p><figure style="flex-grow: 406; flex-basis: 976px">
+		<a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-console.png" data-size="2880x708"><img src="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-console.png"
+				srcset="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-console_hua43c829d82abefa6bfdf611db7d92e17_185012_480x0_resize_box_3.png 480w, /p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-console_hua43c829d82abefa6bfdf611db7d92e17_185012_1024x0_resize_box_3.png 1024w"
+				width="2880"
+				height="708"
+				loading="lazy"
+				alt="iam-console">
+		</a>
+		
+		<figcaption>iam-console</figcaption>
+		
+	</figure></p>
+<p>Give your user a memorable name and <strong>only enable programmatic access</strong>. Click on the &ldquo;Next: Permissions&rdquo; button.</p>
+<p><figure style="flex-grow: 187; flex-basis: 449px">
+		<a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step1.png" data-size="1976x1056"><img src="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step1.png"
+				srcset="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step1_hucee57efe9256af08cd78a9de9b2a0875_204665_480x0_resize_box_3.png 480w, /p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step1_hucee57efe9256af08cd78a9de9b2a0875_204665_1024x0_resize_box_3.png 1024w"
+				width="1976"
+				height="1056"
+				loading="lazy"
+				alt="iam-step1">
+		</a>
+		
+		<figcaption>iam-step1</figcaption>
+		
+	</figure></p>
+<p>Next we&rsquo;ll setup the user permissions, in the second step clik on &ldquo;Attach existing policies directly&rdquo; to choose a policy to attach, there is no policy yet, so we&rsquo;ll need to create a new one. To create it click on the &ldquo;Create policy&rdquo; button, this opens a new tab.</p>
+<p><figure style="flex-grow: 225; flex-basis: 540px">
+		<a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step2.png" data-size="2064x916"><img src="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step2.png"
+				srcset="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step2_huaac316f74b43d237cac18566aa8ad659_188023_480x0_resize_box_3.png 480w, /p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step2_huaac316f74b43d237cac18566aa8ad659_188023_1024x0_resize_box_3.png 1024w"
+				width="2064"
+				height="916"
+				loading="lazy"
+				alt="iam-step2">
+		</a>
+		
+		<figcaption>iam-step2</figcaption>
+		
+	</figure></p>
+<p>In the new tab that was opened click on the &ldquo;JSON&rdquo; tab to define the new policy using JSON. Paste the following text and don&rsquo;t forget to change the bucket name for your bucket name:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&#34;s3:PutObject&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;s3:GetObject&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;s3:ListBucket&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;s3:DeleteObject&#34;</span>
+            <span class="p">],</span>
+            <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&#34;arn:aws:s3:::YOUR_BUCKET_NAME/*&#34;</span><span class="p">,</span>
+                <span class="s2">&#34;arn:aws:s3:::YOUR_BUCKET_NAME&#34;</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div><p>This policy ensures that the user only has access to the bucket of your choosing.</p>
+<p><figure style="flex-grow: 284; flex-basis: 681px">
+		<a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step3.png" data-size="2488x876"><img src="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step3.png"
+				srcset="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step3_hu08d1f3df05b7560dadc5a7c1c4f1e43b_183887_480x0_resize_box_3.png 480w, /p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step3_hu08d1f3df05b7560dadc5a7c1c4f1e43b_183887_1024x0_resize_box_3.png 1024w"
+				width="2488"
+				height="876"
+				loading="lazy"
+				alt="iam-step3">
+		</a>
+		
+		<figcaption>iam-step3</figcaption>
+		
+	</figure></p>
+<p>Click on &ldquo;Next: Tags&rdquo; and optionally add tags to identify the policy. After That click on &ldquo;Next: Review&rdquo; to finish configuring the policy. Choose a name and optionally add a description to your new policy.</p>
+<p><figure style="flex-grow: 369; flex-basis: 886px">
+		<a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step4.png" data-size="2496x676"><img src="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step4.png"
+				srcset="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step4_hu6ff60df0b0f177cd6a8ba36a8e7e2d04_104177_480x0_resize_box_3.png 480w, /p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step4_hu6ff60df0b0f177cd6a8ba36a8e7e2d04_104177_1024x0_resize_box_3.png 1024w"
+				width="2496"
+				height="676"
+				loading="lazy"
+				alt="iam-step4">
+		</a>
+		
+		<figcaption>iam-step4</figcaption>
+		
+	</figure></p>
+<p>Click on &ldquo;Create policy&rdquo; to finish creating the policy. You can now go back to the user creation tab. Click on the refresh button and use the filter to look for your newly created policy. Select it and click the &ldquo;Next&rdquo; button until you create your new user. Once the user has been created you&rsquo;ll be able to copy the access key and the secret access key only this once.</p>
+<p><figure style="flex-grow: 211; flex-basis: 508px">
+		<a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-user-secrets.png" data-size="1988x938"><img src="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-user-secrets.png"
+				srcset="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-user-secrets_hu17dbd71991de5a33a54d14755f78f0cf_141159_480x0_resize_box_3.png 480w, /p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-user-secrets_hu17dbd71991de5a33a54d14755f78f0cf_141159_1024x0_resize_box_3.png 1024w"
+				width="1988"
+				height="938"
+				loading="lazy"
+				alt="iam-user-secrets">
+		</a>
+		
+		<figcaption>iam-user-secrets</figcaption>
+		
+	</figure></p>
+<h3 id="raspberry-pi-aws-cli-credentials">Raspberry Pi aws CLI credentials</h3>
+<p>Setting up the aws CLI credentials is very simple, you don&rsquo;t even need to install the cli to complete this step. Logged into your raspberry pi create a directory in your home directory with the name <code>.aws</code>, then navigate to it and create a file named <code>config</code> and another one named <code>credentials</code>.</p>
+<pre tabindex="0"><code># config file
+[default]
+region = us-west-2
+</code></pre><p>Change the region value for the region of your bucket.</p>
+<pre tabindex="0"><code># credentials file
+[default]
+aws_access_key_id = USER_ACCESS_KEY
+aws_secret_access_key = USER_SECRET_ACCESS_KEY
+</code></pre><p>Insert the credentials for the created aws user.</p>
+<h2 id="setting-up-mlflow-server">Setting up mlflow server</h2>
+<p>We&rsquo;ll be using a python virtual environment to isolate our mlflow dependencies and other requirements. But you can always choose to not use a virtual environment.</p>
+<p>Logged into your raspberry pi run the following commands</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># create a diretory for our instalation</span>
+mkdir mlflow
+<span class="nb">cd</span> mlflow
+<span class="c1"># create virtual environment and activate it</span>
+python3 -m venv venv
+<span class="nb">source</span> venv/bin/activate
+<span class="c1"># install dependencies</span>
+sudo apt update
+sudo apt install awscli
+pip install mlflow<span class="o">[</span>extras<span class="o">]</span> psycopg2-binary boto3
+pip install --upgrade awscli
+</code></pre></div><p>Now we can run the mlflow server. For this example we&rsquo;ll be writing the postgres credentials in plain text, but this is something that could be setup as environment variables. Run only one of these commands:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># local storage for artifacts</span>
+nohup mlflow server <span class="se">\
+</span><span class="se"></span>  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow <span class="se">\
+</span><span class="se"></span>  --host 127.0.0.1 --port <span class="m">5000</span> <span class="p">&amp;</span>
+
+<span class="c1"># s3 artifact starage</span>
+nohup mlflow server <span class="se">\
+</span><span class="se"></span>  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow <span class="se">\
+</span><span class="se"></span>  --default-artifact-root s3://some-bucket-name <span class="se">\
+</span><span class="se"></span>  --host 127.0.0.1 --port <span class="m">5000</span> <span class="p">&amp;</span>
+
+<span class="c1"># s3 artifact starage with customs root</span>
+nohup mlflow server <span class="se">\
+</span><span class="se"></span>  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow <span class="se">\
+</span><span class="se"></span>  --default-artifact-root s3://some-bucket-name/custom-artifact-root <span class="se">\
+</span><span class="se"></span>  --host 127.0.0.1 --port <span class="m">5000</span> <span class="p">&amp;</span>
+</code></pre></div><p>Let&rsquo;s break the command down:</p>
+<ul>
+<li><code>nohup</code> runs our command in the backgroug</li>
+<li><code>--backend-store-uri</code> is the URI to our docker postgres container</li>
+<li><code>--default-artifact-root</code> in case we&rsquo;re using s3 as artifact storage, we specify the bucket and folder that we want mlflow to use as the root path for all artifacts</li>
+<li><code>--host</code> and <code>--port</code> specify that we&rsquo;re using localhost and the 5000 port, it&rsquo;s a good practice to specify it</li>
+</ul>
+<p>If you use your browser to navigate to your raspberry pi&rsquo;s IP and port (e.g. http://192.168.100.15:5000), you should see the mlflow UI (assuming that you have have the port open in your Pi). If your Pi isn&rsquo;t onfigured to allow connections on the specified port. Allowing trafic on ports is out of the scope of this post, but there are great resources out there on how to open ports for connections.</p>
+<h2 id="setting-up-nginx">Setting up nginx</h2>
+<p>Finally we&rsquo;ll setup nginx as a reverse proxy to handle traffic to our mlflow server using http basic authentication. Note that we&rsquo;re assuming you haven&rsquo;t setup a different web server like apache, tomcat or lighttpd. To install nginx run the following commands:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo apt update
+sudo apt install nginx
+sudo apt install apache2-utils
+<span class="c1"># verify nginx is running</span>
+sudo systemctl restart nginx
+
+<span class="c1"># create an user for http auth</span>
+sudo htpasswd -c /etc/nginx/.htpasswd someuser
+
+<span class="c1"># configure nginx</span>
+sudo unlink /etc/nginx/sites-enabled/default
+<span class="nb">cd</span> /etc/nginx/sites-available
+sudo nano mlflow.conf
+</code></pre></div><p>For the confifuration paste the following:</p>
+<pre tabindex="0"><code>server {
+  listen 80;
+  listen [::]:80;
+  # change server_name to your raspberry pi's IP
+  server_name 192.168.x.x;
+  # if you have a local DNS setup you can use a custom domain
+  # server_name my_local_dns_domain.com;
+
+  access_log /var/log/nginx/mlflow-access.log;
+  error_log /var/log/nginx/mlflow-error.log;
+
+  location / {
+    proxy_pass http://127.0.0.1:5000;
+    auth_basic &quot;Restricted Content&quot;;
+    auth_basic_user_file /etc/nginx/.htpasswd;
+  }
+}
+</code></pre><p>Final commands to check the configuration was done correctly and reload nginx:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo ln -s /etc/nginx/sites-available/mlflow.conf /etc/nginx/sites-enabled/mlflow.conf
+<span class="c1"># test configuration</span>
+sudo nginx -t
+<span class="c1"># restart nginx</span>
+sudo systemctl restart nginx
+</code></pre></div><h2 id="starting-mlflow-on-raspberry-pi-reboot">Starting mlflow on raspberry pi reboot</h2>
+<p>Our final step is to make sure that our mlflow server is up even after we reboot our Pi. We can do that with a simple shell script and crontab.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># navigate to our mlflow directory</span>
+<span class="nb">cd</span> ~/mlflow
+nano start-mlflow.sh
+</code></pre></div><p>Paste the the following contents in the script:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
+</span><span class="cp"></span>
+<span class="nv">HERE</span><span class="o">=</span><span class="k">$(</span> <span class="nb">cd</span> <span class="s2">&#34;</span><span class="k">$(</span>dirname <span class="s2">&#34;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">[0]</span><span class="si">}</span><span class="s2">&#34;</span><span class="k">)</span><span class="s2">&#34;</span> <span class="p">;</span> <span class="nb">pwd</span> -P <span class="k">)</span>
+
+<span class="nb">cd</span> <span class="nv">$HERE</span>
+<span class="nb">source</span> venv/bin/activate
+<span class="c1"># use the version of the mlflow command that you chose</span>
+nohup mlflow server <span class="se">\
+</span><span class="se"></span>  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow <span class="se">\
+</span><span class="se"></span>  --default-artifact-root s3://some-bucket-name/custom-artifact-root <span class="se">\
+</span><span class="se"></span>  --host 127.0.0.1 --port <span class="m">5000</span> <span class="p">&amp;</span>
+</code></pre></div><p>Use <!-- raw HTML omitted -->Ctrl<!-- raw HTML omitted --> + <!-- raw HTML omitted -->O<!-- raw HTML omitted --> to save and <!-- raw HTML omitted -->Ctrl<!-- raw HTML omitted --> + <!-- raw HTML omitted -->X<!-- raw HTML omitted --> to exit.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">chmod +x start-mlflow.sh
+crontab -e
+</code></pre></div><p>Paste the following line at the end of the file:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># mlflow tracking server</span>
+@reboot ~/mlflow/start-mlflow.sh
+</code></pre></div><p>And all done! 🎉 Your mlflow tracking server is now live. You can go to your raspberry pi&rsquo;s IP (or domain if you setup a local DNS domain like I did) and you should see your tracking server. It&rsquo;ll ask you for the username you defined in the <a class="link" href="#setting-up-nginx" >nginx configuration part</a>.</p>
+<p><figure style="flex-grow: 292; flex-basis: 702px">
+		<a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-login.png" data-size="2014x688"><img src="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-login.png"
+				srcset="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-login_hu5399c6ebc004387fabd58e388369116a_93011_480x0_resize_box_3.png 480w, /p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-login_hu5399c6ebc004387fabd58e388369116a_93011_1024x0_resize_box_3.png 1024w"
+				width="2014"
+				height="688"
+				loading="lazy"
+				alt="mlflow-login">
+		</a>
+		
+		<figcaption>mlflow-login</figcaption>
+		
+	</figure></p>
+<p><figure style="flex-grow: 224; flex-basis: 538px">
+		<a href="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-server.png" data-size="2880x1284"><img src="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-server.png"
+				srcset="/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-server_hu25bdd1a3948b50115cd5ff1ad4f88ad6_251895_480x0_resize_box_3.png 480w, /p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-server_hu25bdd1a3948b50115cd5ff1ad4f88ad6_251895_1024x0_resize_box_3.png 1024w"
+				width="2880"
+				height="1284"
+				loading="lazy"
+				alt="mlflow-server">
+		</a>
+		
+		<figcaption>mlflow-server</figcaption>
+		
+	</figure></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/raspberrypi/">raspberrypi</a>
+        
+            <a href="/tags/machine-learning/">machine learning</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+     
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "keanrawr" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2021 - 
+        
+        2022 Kean Rawr
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#what-well-be-setting-up">What we&rsquo;ll be setting up</a></li>
+    <li><a href="#setting-up-backend-storage">Setting up backend storage</a></li>
+    <li><a href="#optional-set-up-s3-artifact-storage">(Optional) Set up s3 artifact storage</a>
+      <ol>
+        <li><a href="#creating-s3-bucket">Creating s3 bucket</a></li>
+        <li><a href="#create-an-aws-user-to-access-the-bucket">Create an aws user to access the bucket</a></li>
+        <li><a href="#raspberry-pi-aws-cli-credentials">Raspberry Pi aws CLI credentials</a></li>
+      </ol>
+    </li>
+    <li><a href="#setting-up-mlflow-server">Setting up mlflow server</a></li>
+    <li><a href="#setting-up-nginx">Setting up nginx</a></li>
+    <li><a href="#starting-mlflow-on-raspberry-pi-reboot">Starting mlflow on raspberry pi reboot</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
