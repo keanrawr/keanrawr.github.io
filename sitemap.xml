@@ -2,43 +2,45 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</loc>
+    <loc>https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/</loc>
+    <loc>https://keanrawr.github.io/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/tags/machine-learning/</loc>
+    <loc>https://keanrawr.github.io/tags/machine-learning/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/post/</loc>
+    <loc>https://keanrawr.github.io/post/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/tags/raspberrypi/</loc>
+    <loc>https://keanrawr.github.io/tags/raspberrypi/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/tags/</loc>
+    <loc>https://keanrawr.github.io/tags/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/about/</loc>
+    <loc>https://keanrawr.github.io/about/</loc>
     <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/p/first-post/</loc>
+    <loc>https://keanrawr.github.io/p/first-post/</loc>
     <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/page/</loc>
+    <loc>https://keanrawr.github.io/page/</loc>
     <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/tags/personal/</loc>
+    <loc>https://keanrawr.github.io/tags/personal/</loc>
     <lastmod>2021-07-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/archives/</loc>
+    <loc>https://keanrawr.github.io/archives/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/categories/</loc>
+    <loc>https://keanrawr.github.io/categories/</loc>
   </url><url>
-    <loc>https://example.com/search/</loc>
+    <loc>https://keanrawr.github.io/links/</loc>
   </url><url>
-    <loc>https://example.com/categories/test/</loc>
+    <loc>https://keanrawr.github.io/search/</loc>
+  </url><url>
+    <loc>https://keanrawr.github.io/categories/test/</loc>
   </url>
 </urlset>

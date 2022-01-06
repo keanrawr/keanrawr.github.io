@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>raspberrypi on Kean Rawr</title>
-    <link>https://example.com/tags/raspberrypi/</link>
+    <link>https://keanrawr.github.io/tags/raspberrypi/</link>
     <description>Recent content in raspberrypi on Kean Rawr</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 04 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://example.com/tags/raspberrypi/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 04 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://keanrawr.github.io/tags/raspberrypi/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hosting mlflow on Raspberry Pi Behind nginx</title>
-      <link>https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</link>
+      <link>https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</link>
       <pubDate>Tue, 04 Jan 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</guid>
+      <guid>https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</guid>
       <description>Why you need to track experiments As data scientists or Machine Learning engineers one of the most overlook things is &amp;ldquo;model lineage&amp;rdquo;, that is, being able to track the data and hyper parameters used to produce a model. This helps ensure reproducibility, which is really important for a number of reasons.
 mlflow isn&amp;rsquo;t the only tool that helps us track experiments, but is the one I like the most, other tools for experiment tracking are: comet.</description>
     </item>

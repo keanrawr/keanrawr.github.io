@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Kean Rawr</title>
-        <link>https://example.com/</link>
+        <link>https://keanrawr.github.io/</link>
         <description>Recent content on Kean Rawr</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 04 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 04 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://keanrawr.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Hosting mlflow on Raspberry Pi Behind nginx</title>
-        <link>https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</link>
+        <link>https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</link>
         <pubDate>Tue, 04 Jan 2022 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</guid>
-        <description>&lt;img src="https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/banner.png" alt="Featured image of post Hosting mlflow on Raspberry Pi Behind nginx" /&gt;&lt;h1 id=&#34;why-you-need-to-track-experiments&#34;&gt;Why you need to track experiments&lt;/h1&gt;
+        <guid>https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</guid>
+        <description>&lt;img src="https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/banner.png" alt="Featured image of post Hosting mlflow on Raspberry Pi Behind nginx" /&gt;&lt;h1 id=&#34;why-you-need-to-track-experiments&#34;&gt;Why you need to track experiments&lt;/h1&gt;
 &lt;p&gt;As data scientists or Machine Learning engineers one of the most overlook things is &amp;ldquo;model lineage&amp;rdquo;, that is, being able to track the data and hyper parameters used to produce a model. This helps ensure reproducibility, which is really important for a number of reasons.&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://mlflow.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;mlflow&lt;/a&gt; isn&amp;rsquo;t the only tool that helps us track experiments, but is the one I like the most, other tools for experiment tracking are: &lt;a class=&#34;link&#34; href=&#34;https://www.comet.ml/site/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
@@ -41,18 +41,25 @@
 &lt;li&gt;&lt;strong&gt;Artifact storage&lt;/strong&gt;: We need a place for artifacts, such as the serialized model, or a plot that you want to save. This can also be locally stored, but we&amp;rsquo;ll see an optional aws s3 storage solution.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;In the end this is what we&amp;rsquo;ll be building.&lt;/p&gt;
-&lt;p&gt;&lt;figure style=&#34;flex-grow: 166; flex-basis: 399px&#34;&gt;
-		&lt;a href=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/diagram.png&#34; data-size=&#34;3004x1804&#34;&gt;&lt;img src=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/diagram.png&#34;
-				srcset=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/diagram_hu1b0d754b0fc1b2df71f890cd71f7c922_352485_480x0_resize_box_3.png 480w, https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/diagram_hu1b0d754b0fc1b2df71f890cd71f7c922_352485_1024x0_resize_box_3.png 1024w&#34;
-				width=&#34;3004&#34;
-				height=&#34;1804&#34;
-				loading=&#34;lazy&#34;
-				alt=&#34;diagram&#34;&gt;
-		&lt;/a&gt;
-		
-		&lt;figcaption&gt;diagram&lt;/figcaption&gt;
-		
-	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 166; 
+			flex-basis: 399px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/diagram.png&#34; data-size=&#34;3004x1804&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/diagram.png&#34;
+			width=&#34;3004&#34;
+			height=&#34;1804&#34;
+			srcset=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/diagram_hu1b0d754b0fc1b2df71f890cd71f7c922_352485_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/diagram_hu1b0d754b0fc1b2df71f890cd71f7c922_352485_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;diagram&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;diagram&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
 &lt;h2 id=&#34;setting-up-backend-storage&#34;&gt;Setting up backend storage&lt;/h2&gt;
 &lt;p&gt;Docker is a great tool because it lets us deploy a number of tools fast and easy, plus it has a lot of official images, one of which is postgres. To run a postgres docker container there are a couple of things that we need to define, the basic syntax is:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker run -d --name container-name &lt;span class=&#34;se&#34;&gt;\
@@ -85,74 +92,109 @@
 &lt;/ul&gt;
 &lt;h3 id=&#34;creating-s3-bucket&#34;&gt;Creating s3 bucket&lt;/h3&gt;
 &lt;p&gt;In your aws console go to the s3 console, you can use the search bar or in the &amp;ldquo;All services&amp;rdquo; part of the console. Once in the s3 console click on the &amp;ldquo;Create bucket&amp;rdquo; button.&lt;/p&gt;
-&lt;p&gt;&lt;figure style=&#34;flex-grow: 213; flex-basis: 513px&#34;&gt;
-		&lt;a href=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-console.png&#34; data-size=&#34;2880x1346&#34;&gt;&lt;img src=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-console.png&#34;
-				srcset=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-console_hu1c136b503fe6d9acba137b6fa7b90da6_267979_480x0_resize_box_3.png 480w, https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-console_hu1c136b503fe6d9acba137b6fa7b90da6_267979_1024x0_resize_box_3.png 1024w&#34;
-				width=&#34;2880&#34;
-				height=&#34;1346&#34;
-				loading=&#34;lazy&#34;
-				alt=&#34;s3-console&#34;&gt;
-		&lt;/a&gt;
-		
-		&lt;figcaption&gt;s3-console&lt;/figcaption&gt;
-		
-	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 213; 
+			flex-basis: 513px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-console.png&#34; data-size=&#34;2880x1346&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-console.png&#34;
+			width=&#34;2880&#34;
+			height=&#34;1346&#34;
+			srcset=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-console_hu1c136b503fe6d9acba137b6fa7b90da6_267979_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-console_hu1c136b503fe6d9acba137b6fa7b90da6_267979_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;s3-console&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;s3-console&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;Choose a name and region for your bucket. For the bucket name choose a descriptive name, bucket names need to be unique across aws regions, so you might need to give it a couple of tries. For the region, choose the closest one to you. Leave everything else with the default settings and click on &amp;ldquo;Create bucket&amp;rdquo; at the bottom of the page.&lt;/p&gt;
-&lt;p&gt;&lt;figure style=&#34;flex-grow: 191; flex-basis: 459px&#34;&gt;
-		&lt;a href=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-create.png&#34; data-size=&#34;1692x884&#34;&gt;&lt;img src=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-create.png&#34;
-				srcset=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-create_hu6a845bdf88dbab4058273d5ddbd66bed_138694_480x0_resize_box_3.png 480w, https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-create_hu6a845bdf88dbab4058273d5ddbd66bed_138694_1024x0_resize_box_3.png 1024w&#34;
-				width=&#34;1692&#34;
-				height=&#34;884&#34;
-				loading=&#34;lazy&#34;
-				alt=&#34;s3-create&#34;&gt;
-		&lt;/a&gt;
-		
-		&lt;figcaption&gt;s3-create&lt;/figcaption&gt;
-		
-	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 191; 
+			flex-basis: 459px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-create.png&#34; data-size=&#34;1692x884&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-create.png&#34;
+			width=&#34;1692&#34;
+			height=&#34;884&#34;
+			srcset=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-create_hu6a845bdf88dbab4058273d5ddbd66bed_138694_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/s3-create_hu6a845bdf88dbab4058273d5ddbd66bed_138694_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;s3-create&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;s3-create&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; You don&amp;rsquo;t need a new bucket for this, in my case I have a bucket that I use for miscellaneous things and just use a different root for each use case.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;create-an-aws-user-to-access-the-bucket&#34;&gt;Create an aws user to access the bucket&lt;/h3&gt;
 &lt;p&gt;Navigate to the IAM console, in the side menu there&amp;rsquo;s an &amp;ldquo;Users&amp;rdquo; menu item. Once there click on the &amp;ldquo;Add users&amp;rdquo; button.&lt;/p&gt;
-&lt;p&gt;&lt;figure style=&#34;flex-grow: 406; flex-basis: 976px&#34;&gt;
-		&lt;a href=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-console.png&#34; data-size=&#34;2880x708&#34;&gt;&lt;img src=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-console.png&#34;
-				srcset=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-console_hua43c829d82abefa6bfdf611db7d92e17_185012_480x0_resize_box_3.png 480w, https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-console_hua43c829d82abefa6bfdf611db7d92e17_185012_1024x0_resize_box_3.png 1024w&#34;
-				width=&#34;2880&#34;
-				height=&#34;708&#34;
-				loading=&#34;lazy&#34;
-				alt=&#34;iam-console&#34;&gt;
-		&lt;/a&gt;
-		
-		&lt;figcaption&gt;iam-console&lt;/figcaption&gt;
-		
-	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 406; 
+			flex-basis: 976px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-console.png&#34; data-size=&#34;2880x708&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-console.png&#34;
+			width=&#34;2880&#34;
+			height=&#34;708&#34;
+			srcset=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-console_hua43c829d82abefa6bfdf611db7d92e17_185012_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-console_hua43c829d82abefa6bfdf611db7d92e17_185012_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;iam-console&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;iam-console&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;Give your user a memorable name and &lt;strong&gt;only enable programmatic access&lt;/strong&gt;. Click on the &amp;ldquo;Next: Permissions&amp;rdquo; button.&lt;/p&gt;
-&lt;p&gt;&lt;figure style=&#34;flex-grow: 187; flex-basis: 449px&#34;&gt;
-		&lt;a href=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step1.png&#34; data-size=&#34;1976x1056&#34;&gt;&lt;img src=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step1.png&#34;
-				srcset=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step1_hucee57efe9256af08cd78a9de9b2a0875_204665_480x0_resize_box_3.png 480w, https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step1_hucee57efe9256af08cd78a9de9b2a0875_204665_1024x0_resize_box_3.png 1024w&#34;
-				width=&#34;1976&#34;
-				height=&#34;1056&#34;
-				loading=&#34;lazy&#34;
-				alt=&#34;iam-step1&#34;&gt;
-		&lt;/a&gt;
-		
-		&lt;figcaption&gt;iam-step1&lt;/figcaption&gt;
-		
-	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 187; 
+			flex-basis: 449px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step1.png&#34; data-size=&#34;1976x1056&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step1.png&#34;
+			width=&#34;1976&#34;
+			height=&#34;1056&#34;
+			srcset=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step1_hucee57efe9256af08cd78a9de9b2a0875_204665_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step1_hucee57efe9256af08cd78a9de9b2a0875_204665_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;iam-step1&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;iam-step1&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;Next we&amp;rsquo;ll setup the user permissions, in the second step clik on &amp;ldquo;Attach existing policies directly&amp;rdquo; to choose a policy to attach, there is no policy yet, so we&amp;rsquo;ll need to create a new one. To create it click on the &amp;ldquo;Create policy&amp;rdquo; button, this opens a new tab.&lt;/p&gt;
-&lt;p&gt;&lt;figure style=&#34;flex-grow: 225; flex-basis: 540px&#34;&gt;
-		&lt;a href=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step2.png&#34; data-size=&#34;2064x916&#34;&gt;&lt;img src=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step2.png&#34;
-				srcset=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step2_huaac316f74b43d237cac18566aa8ad659_188023_480x0_resize_box_3.png 480w, https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step2_huaac316f74b43d237cac18566aa8ad659_188023_1024x0_resize_box_3.png 1024w&#34;
-				width=&#34;2064&#34;
-				height=&#34;916&#34;
-				loading=&#34;lazy&#34;
-				alt=&#34;iam-step2&#34;&gt;
-		&lt;/a&gt;
-		
-		&lt;figcaption&gt;iam-step2&lt;/figcaption&gt;
-		
-	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 225; 
+			flex-basis: 540px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step2.png&#34; data-size=&#34;2064x916&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step2.png&#34;
+			width=&#34;2064&#34;
+			height=&#34;916&#34;
+			srcset=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step2_huaac316f74b43d237cac18566aa8ad659_188023_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step2_huaac316f74b43d237cac18566aa8ad659_188023_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;iam-step2&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;iam-step2&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;In the new tab that was opened click on the &amp;ldquo;JSON&amp;rdquo; tab to define the new policy using JSON. Paste the following text and don&amp;rsquo;t forget to change the bucket name for your bucket name:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
     &lt;span class=&#34;nt&#34;&gt;&amp;#34;Version&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;2012-10-17&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
@@ -173,44 +215,65 @@
     &lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
 &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This policy ensures that the user only has access to the bucket of your choosing.&lt;/p&gt;
-&lt;p&gt;&lt;figure style=&#34;flex-grow: 284; flex-basis: 681px&#34;&gt;
-		&lt;a href=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step3.png&#34; data-size=&#34;2488x876&#34;&gt;&lt;img src=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step3.png&#34;
-				srcset=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step3_hu08d1f3df05b7560dadc5a7c1c4f1e43b_183887_480x0_resize_box_3.png 480w, https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step3_hu08d1f3df05b7560dadc5a7c1c4f1e43b_183887_1024x0_resize_box_3.png 1024w&#34;
-				width=&#34;2488&#34;
-				height=&#34;876&#34;
-				loading=&#34;lazy&#34;
-				alt=&#34;iam-step3&#34;&gt;
-		&lt;/a&gt;
-		
-		&lt;figcaption&gt;iam-step3&lt;/figcaption&gt;
-		
-	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 284; 
+			flex-basis: 681px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step3.png&#34; data-size=&#34;2488x876&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step3.png&#34;
+			width=&#34;2488&#34;
+			height=&#34;876&#34;
+			srcset=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step3_hu08d1f3df05b7560dadc5a7c1c4f1e43b_183887_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step3_hu08d1f3df05b7560dadc5a7c1c4f1e43b_183887_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;iam-step3&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;iam-step3&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;Click on &amp;ldquo;Next: Tags&amp;rdquo; and optionally add tags to identify the policy. After That click on &amp;ldquo;Next: Review&amp;rdquo; to finish configuring the policy. Choose a name and optionally add a description to your new policy.&lt;/p&gt;
-&lt;p&gt;&lt;figure style=&#34;flex-grow: 369; flex-basis: 886px&#34;&gt;
-		&lt;a href=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step4.png&#34; data-size=&#34;2496x676&#34;&gt;&lt;img src=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step4.png&#34;
-				srcset=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step4_hu6ff60df0b0f177cd6a8ba36a8e7e2d04_104177_480x0_resize_box_3.png 480w, https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step4_hu6ff60df0b0f177cd6a8ba36a8e7e2d04_104177_1024x0_resize_box_3.png 1024w&#34;
-				width=&#34;2496&#34;
-				height=&#34;676&#34;
-				loading=&#34;lazy&#34;
-				alt=&#34;iam-step4&#34;&gt;
-		&lt;/a&gt;
-		
-		&lt;figcaption&gt;iam-step4&lt;/figcaption&gt;
-		
-	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 369; 
+			flex-basis: 886px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step4.png&#34; data-size=&#34;2496x676&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step4.png&#34;
+			width=&#34;2496&#34;
+			height=&#34;676&#34;
+			srcset=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step4_hu6ff60df0b0f177cd6a8ba36a8e7e2d04_104177_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-step4_hu6ff60df0b0f177cd6a8ba36a8e7e2d04_104177_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;iam-step4&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;iam-step4&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;Click on &amp;ldquo;Create policy&amp;rdquo; to finish creating the policy. You can now go back to the user creation tab. Click on the refresh button and use the filter to look for your newly created policy. Select it and click the &amp;ldquo;Next&amp;rdquo; button until you create your new user. Once the user has been created you&amp;rsquo;ll be able to copy the access key and the secret access key only this once.&lt;/p&gt;
-&lt;p&gt;&lt;figure style=&#34;flex-grow: 211; flex-basis: 508px&#34;&gt;
-		&lt;a href=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-user-secrets.png&#34; data-size=&#34;1988x938&#34;&gt;&lt;img src=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-user-secrets.png&#34;
-				srcset=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-user-secrets_hu17dbd71991de5a33a54d14755f78f0cf_141159_480x0_resize_box_3.png 480w, https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-user-secrets_hu17dbd71991de5a33a54d14755f78f0cf_141159_1024x0_resize_box_3.png 1024w&#34;
-				width=&#34;1988&#34;
-				height=&#34;938&#34;
-				loading=&#34;lazy&#34;
-				alt=&#34;iam-user-secrets&#34;&gt;
-		&lt;/a&gt;
-		
-		&lt;figcaption&gt;iam-user-secrets&lt;/figcaption&gt;
-		
-	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 211; 
+			flex-basis: 508px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-user-secrets.png&#34; data-size=&#34;1988x938&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-user-secrets.png&#34;
+			width=&#34;1988&#34;
+			height=&#34;938&#34;
+			srcset=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-user-secrets_hu17dbd71991de5a33a54d14755f78f0cf_141159_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/iam-user-secrets_hu17dbd71991de5a33a54d14755f78f0cf_141159_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;iam-user-secrets&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;iam-user-secrets&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
 &lt;h3 id=&#34;raspberry-pi-aws-cli-credentials&#34;&gt;Raspberry Pi aws CLI credentials&lt;/h3&gt;
 &lt;p&gt;Setting up the aws CLI credentials is very simple, you don&amp;rsquo;t even need to install the cli to complete this step. Logged into your raspberry pi create a directory in your home directory with the name &lt;code&gt;.aws&lt;/code&gt;, then navigate to it and create a file named &lt;code&gt;config&lt;/code&gt; and another one named &lt;code&gt;credentials&lt;/code&gt;.&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# config file
@@ -317,46 +380,60 @@ nohup mlflow server &lt;span class=&#34;se&#34;&gt;\
 &lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow &lt;span class=&#34;se&#34;&gt;\
 &lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --default-artifact-root s3://some-bucket-name/custom-artifact-root &lt;span class=&#34;se&#34;&gt;\
 &lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --host 127.0.0.1 --port &lt;span class=&#34;m&#34;&gt;5000&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;amp;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Use &lt;!-- raw HTML omitted --&gt;Ctrl&lt;!-- raw HTML omitted --&gt; + &lt;!-- raw HTML omitted --&gt;O&lt;!-- raw HTML omitted --&gt; to save and &lt;!-- raw HTML omitted --&gt;Ctrl&lt;!-- raw HTML omitted --&gt; + &lt;!-- raw HTML omitted --&gt;X&lt;!-- raw HTML omitted --&gt; to exit.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Use &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;O&lt;/kbd&gt; to save and &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;X&lt;/kbd&gt; to exit.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;chmod +x start-mlflow.sh
 crontab -e
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Paste the following line at the end of the file:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# mlflow tracking server&lt;/span&gt;
 @reboot ~/mlflow/start-mlflow.sh
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And all done! 🎉 Your mlflow tracking server is now live. You can go to your raspberry pi&amp;rsquo;s IP (or domain if you setup a local DNS domain like I did) and you should see your tracking server. It&amp;rsquo;ll ask you for the username you defined in the &lt;a class=&#34;link&#34; href=&#34;#setting-up-nginx&#34; &gt;nginx configuration part&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;figure style=&#34;flex-grow: 292; flex-basis: 702px&#34;&gt;
-		&lt;a href=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-login.png&#34; data-size=&#34;2014x688&#34;&gt;&lt;img src=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-login.png&#34;
-				srcset=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-login_hu5399c6ebc004387fabd58e388369116a_93011_480x0_resize_box_3.png 480w, https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-login_hu5399c6ebc004387fabd58e388369116a_93011_1024x0_resize_box_3.png 1024w&#34;
-				width=&#34;2014&#34;
-				height=&#34;688&#34;
-				loading=&#34;lazy&#34;
-				alt=&#34;mlflow-login&#34;&gt;
-		&lt;/a&gt;
-		
-		&lt;figcaption&gt;mlflow-login&lt;/figcaption&gt;
-		
-	&lt;/figure&gt;&lt;/p&gt;
-&lt;p&gt;&lt;figure style=&#34;flex-grow: 224; flex-basis: 538px&#34;&gt;
-		&lt;a href=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-server.png&#34; data-size=&#34;2880x1284&#34;&gt;&lt;img src=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-server.png&#34;
-				srcset=&#34;https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-server_hu25bdd1a3948b50115cd5ff1ad4f88ad6_251895_480x0_resize_box_3.png 480w, https://example.com/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-server_hu25bdd1a3948b50115cd5ff1ad4f88ad6_251895_1024x0_resize_box_3.png 1024w&#34;
-				width=&#34;2880&#34;
-				height=&#34;1284&#34;
-				loading=&#34;lazy&#34;
-				alt=&#34;mlflow-server&#34;&gt;
-		&lt;/a&gt;
-		
-		&lt;figcaption&gt;mlflow-server&lt;/figcaption&gt;
-		
-	&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 292; 
+			flex-basis: 702px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-login.png&#34; data-size=&#34;2014x688&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-login.png&#34;
+			width=&#34;2014&#34;
+			height=&#34;688&#34;
+			srcset=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-login_hu5399c6ebc004387fabd58e388369116a_93011_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-login_hu5399c6ebc004387fabd58e388369116a_93011_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;mlflow-login&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;mlflow-login&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 224; 
+			flex-basis: 538px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-server.png&#34; data-size=&#34;2880x1284&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-server.png&#34;
+			width=&#34;2880&#34;
+			height=&#34;1284&#34;
+			srcset=&#34;https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-server_hu25bdd1a3948b50115cd5ff1ad4f88ad6_251895_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/img/mlflow-server_hu25bdd1a3948b50115cd5ff1ad4f88ad6_251895_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;mlflow-server&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;mlflow-server&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
 </description>
         </item>
         <item>
         <title>First Post</title>
-        <link>https://example.com/p/first-post/</link>
+        <link>https://keanrawr.github.io/p/first-post/</link>
         <pubDate>Tue, 20 Jul 2021 00:00:00 +0000</pubDate>
         
-        <guid>https://example.com/p/first-post/</guid>
-        <description>&lt;img src="https://example.com/p/first-post/kean-first-post.jpg" alt="Featured image of post First Post" /&gt;&lt;p&gt;Hello world!&lt;/p&gt;
+        <guid>https://keanrawr.github.io/p/first-post/</guid>
+        <description>&lt;img src="https://keanrawr.github.io/p/first-post/kean-first-post.jpg" alt="Featured image of post First Post" /&gt;&lt;p&gt;Hello world!&lt;/p&gt;
 &lt;p&gt;This is the first official post on my new blog! In this blog I&amp;rsquo;ll talk about data projects that I develop on my free time, and some of the techniques that I&amp;rsquo;ve learned over my professional career.&lt;/p&gt;
 &lt;p&gt;A little about me: I&amp;rsquo;m a data scientist that loves to write code, I love writing in R but focus mainly on python for my professional work. I love playing basketball, not actually a real hard-core NBA fan, but I might start getting more interested in the league to do some fantasy league analysis.&lt;/p&gt;
 &lt;p&gt;I&amp;rsquo;m also a big League of Legends fan, haven&amp;rsquo;t really played much since graduating from university.&lt;/p&gt;

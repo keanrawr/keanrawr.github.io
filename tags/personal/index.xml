@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>personal on Kean Rawr</title>
-    <link>https://example.com/tags/personal/</link>
+    <link>https://keanrawr.github.io/tags/personal/</link>
     <description>Recent content in personal on Kean Rawr</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 20 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://example.com/tags/personal/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 20 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://keanrawr.github.io/tags/personal/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>First Post</title>
-      <link>https://example.com/p/first-post/</link>
+      <link>https://keanrawr.github.io/p/first-post/</link>
       <pubDate>Tue, 20 Jul 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/p/first-post/</guid>
+      <guid>https://keanrawr.github.io/p/first-post/</guid>
       <description>Hello world!
 This is the first official post on my new blog! In this blog I&amp;rsquo;ll talk about data projects that I develop on my free time, and some of the techniques that I&amp;rsquo;ve learned over my professional career.
 A little about me: I&amp;rsquo;m a data scientist that loves to write code, I love writing in R but focus mainly on python for my professional work. I love playing basketball, not actually a real hard-core NBA fan, but I might start getting more interested in the league to do some fantasy league analysis.</description>
