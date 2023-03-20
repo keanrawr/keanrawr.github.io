@@ -6,7 +6,272 @@
         <description>Recent content on Kean Rawr</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 04 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://keanrawr.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 19 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://keanrawr.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Scrape emojis for slack</title>
+        <link>https://keanrawr.github.io/p/scrape-emojis-for-slack/</link>
+        <pubDate>Sun, 19 Mar 2023 00:00:00 +0000</pubDate>
+        
+        <guid>https://keanrawr.github.io/p/scrape-emojis-for-slack/</guid>
+        <description>&lt;img src="https://keanrawr.github.io/p/scrape-emojis-for-slack/banner.jpg" alt="Featured image of post Scrape emojis for slack" /&gt;&lt;h1 id=&#34;why-do-this&#34;&gt;Why do this?&lt;/h1&gt;
+&lt;p&gt;One of the most common pieces of advice that data science newbies get is to learn web scraping, this is usually acompanied by an argument like: &amp;ldquo;WS is a really important skill for data science, since being able to scrape your own dataset from the web comes in handy&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;As a person who dives head first into anything that&amp;rsquo;s deemed &amp;ldquo;highly valuable&amp;rdquo; I went head first into learning web scraping. However, after years in my data science journey, rarely have I had to scrape my own datasets. And this is to be expected, most companies can&amp;rsquo;t even handle the amount of existing data they have at hand, or wouldn&amp;rsquo;t mind paying for some API service or data broker to provide additional datasets.&lt;/p&gt;
+&lt;p&gt;This doesn&amp;rsquo;t mean I think learning web scraping isn&amp;rsquo;t useful, on the contrary, I find WS to be important, but not because you&amp;rsquo;ll have to scrape your datasets. I think that WS is one of the easiest ways to dip your toe into how the web works. As a data scientist you&amp;rsquo;ll eventually find yourself in contact with some form of web service, it could be some endpoint from your company, or a third-party vendor, that provides some data you need, or when putting some model in production. Regardless of the way, shape or form that this interactions comes, knowing your way around what terms like &amp;ldquo;request&amp;rdquo;, &amp;ldquo;authentication&amp;rdquo; or &amp;ldquo;body&amp;rdquo; mean, will make these much easier.&lt;/p&gt;
+&lt;p&gt;The previous being said, we&amp;rsquo;ll go through a simple and fun use case that serves as a light introduction to WS, and as a side effect provides you with a bunch of emojis for your slack workspace!&lt;/p&gt;
+&lt;h2 id=&#34;what-is-web-scraping&#34;&gt;What is web scraping?&lt;/h2&gt;
+&lt;p&gt;There have been many blog posts written on the meaning of WS, so I won&amp;rsquo;t waste too much time defining it.&lt;/p&gt;
+&lt;p&gt;Web scraping is the process of requesting a web page containing data you&amp;rsquo;re interested in, and parsing out said information for some purpose, e.g., downstream processing, or running a text analysis.&lt;/p&gt;
+&lt;h2 id=&#34;what-well-be-doing&#34;&gt;What we&amp;rsquo;ll be doing&lt;/h2&gt;
+&lt;p&gt;We&amp;rsquo;ll be using the &lt;a class=&#34;link&#34; href=&#34;https://rvest.tidyverse.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;rvest&lt;/a&gt; R package to scrape &lt;a class=&#34;link&#34; href=&#34;https://slackmojis.com&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;slackmojis.com&lt;/a&gt; for the &lt;a class=&#34;link&#34; href=&#34;https://slackmojis.com/categories/25-blob-cats-emojis&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;blob cats category&lt;/a&gt;. My employer&amp;rsquo;s slack workspace is lacking on some meow action. We&amp;rsquo;ll be following these rough steps:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Identify the target URL(s)&lt;/li&gt;
+&lt;li&gt;Identify the selector to the emojis&lt;/li&gt;
+&lt;li&gt;Save the emojis locally&lt;/li&gt;
+&lt;li&gt;(Optional) Add them to a slack workspace&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;To follow along you&amp;rsquo;ll need:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A working installation of R&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;rvest&lt;/code&gt; and &lt;code&gt;stringr&lt;/code&gt; R packages&lt;/li&gt;
+&lt;li&gt;(Optionally) the Rstudio IDE&lt;/li&gt;
+&lt;li&gt;A browser with developer tools (e.g., Chrome, Firefox, Edge, Brave)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;idetify-the-target-urls&#34;&gt;Idetify the target URL(s)&lt;/h2&gt;
+&lt;p&gt;This one&amp;rsquo;s kind of a freebie right? We already said that we&amp;rsquo;ll be scraping &lt;a class=&#34;link&#34; href=&#34;https://slackmojis.com/categories/25-blob-cats-emojis&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://slackmojis.com/categories/25-blob-cats-emojis&lt;/a&gt; for meow emojis right? Well, we can still do a little more. If we look closely at the page, there&amp;rsquo;s a &amp;ldquo;See More Blob Cats Emojis&amp;rdquo; button.&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 535; 
+			flex-basis: 1284px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/01-see-more.png&#34; data-size=&#34;2344x438&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/01-see-more.png&#34;
+			width=&#34;2344&#34;
+			height=&#34;438&#34;
+			srcset=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/01-see-more_hub88da78dd9654f293c8a122b9735665d_159444_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/scrape-emojis-for-slack/img/01-see-more_hub88da78dd9654f293c8a122b9735665d_159444_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;See more&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;See more&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;If we click it we are taken to a page with more emojis, looking at the address bar we notice that it&amp;rsquo;s essentially the same address as before, only with some extra characters: &lt;code&gt;?page=1&lt;/code&gt;. This is called a &lt;strong&gt;query string&lt;/strong&gt;, and it&amp;rsquo;s something that we use to tell a web application more about the content we&amp;rsquo;re requesting through some parameters and values, the page number in this case.&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 277; 
+			flex-basis: 665px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/02-query-string.png&#34; data-size=&#34;2358x850&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/02-query-string.png&#34;
+			width=&#34;2358&#34;
+			height=&#34;850&#34;
+			srcset=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/02-query-string_hub1cef62ec343cc53f3dbec0e408ebfdc_202870_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/scrape-emojis-for-slack/img/02-query-string_hub1cef62ec343cc53f3dbec0e408ebfdc_202870_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;Query string page 1&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;Query string page 1&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;Query parameters are specified in the query string, we use the &lt;code&gt;?&lt;/code&gt; character to separate the URL from the query string. The structure of a query string follows this format: &lt;code&gt;param1=value1&amp;amp;param2=value2&amp;amp;...&lt;/code&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;📝 This is a very simple example where we aren&amp;rsquo;t encoding special characters like a whitespace or a question mark in the parameters or values from our query string.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Why is this useful? well, first of all, you&amp;rsquo;re welcome for some useful knowledge. Second, in cases like this we can leverage this information to make our WS adventure easier.&lt;/p&gt;
+&lt;p&gt;Each emoji page contains a 200x5 grid, with this many emojis per page we only need two pages to get all the images we&amp;rsquo;re interested in, something we can manually handle, but imagine that each page contained only 10 emojis, if that were the case, changing the url manually would be really annoying. Let&amp;rsquo;s play with our query parameter, if we set &lt;code&gt;page=0&lt;/code&gt; and hit &amp;ldquo;go&amp;rdquo; in our browser we get&amp;hellip;&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 251; 
+			flex-basis: 604px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/03-query-string.png&#34; data-size=&#34;2352x934&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/03-query-string.png&#34;
+			width=&#34;2352&#34;
+			height=&#34;934&#34;
+			srcset=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/03-query-string_hu9623d0bf0efeeb75f9030ceb1134eb80_241879_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/scrape-emojis-for-slack/img/03-query-string_hu9623d0bf0efeeb75f9030ceb1134eb80_241879_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;Query string page 0&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;Query string page 0&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;The first page! Now we know that we have the ability to programmatically iterate through these pages. This may not be very useful for this particular case, but it might come in handy in other cases.&lt;/p&gt;
+&lt;p&gt;Now that we&amp;rsquo;ve identified what our target URLs look like we can write some initial R code to catch this behavior.&lt;/p&gt;
+&lt;script src=&#34;https://gist.github.com/keanrawr/9c7ca96057b6e9209bbb440aa662fc30.js?file=step-1.r&#34;&gt;&lt;/script&gt;
+&lt;h2 id=&#34;identify-the-selector-to-the-emojis&#34;&gt;Identify the selector to the emojis&lt;/h2&gt;
+&lt;p&gt;I like to think that selectors are the cornerstone of web scraping, it&amp;rsquo;s how we tell rverst (or any other WS framework) what elements of the page we actually want. To give a brief explanation on what selectors are it&amp;rsquo;s worth exploring what a web page is.&lt;/p&gt;
+&lt;p&gt;All web pages are HTML under the hood, Whenever you visit a web page your browser parses the raw HTML, and with the help of &lt;a class=&#34;link&#34; href=&#34;https://en.wikipedia.org/wiki/CSS&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;CSS&lt;/a&gt; and &lt;a class=&#34;link&#34; href=&#34;https://en.wikipedia.org/wiki/JavaScript&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;JavaScript&lt;/a&gt; turns it into whatever&amp;rsquo;s in front of you. You might&amp;rsquo;ve entered &amp;ldquo;source mode&amp;rdquo; by accident at one point, since most chromium-based browsers like chrome or modern edge, have this capability.&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 302; 
+			flex-basis: 725px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/04-source-code.png&#34; data-size=&#34;2262x748&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/04-source-code.png&#34;
+			width=&#34;2262&#34;
+			height=&#34;748&#34;
+			srcset=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/04-source-code_hu49fbae73804018af272427a7cd2f9cdc_320941_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/scrape-emojis-for-slack/img/04-source-code_hu49fbae73804018af272427a7cd2f9cdc_320941_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;Source code page example&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;Source code page example&lt;/figcaption&gt;
+	
+&lt;/figure&gt;
+&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 213; 
+			flex-basis: 512px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/05-parsed.png&#34; data-size=&#34;2346x1098&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/05-parsed.png&#34;
+			width=&#34;2346&#34;
+			height=&#34;1098&#34;
+			srcset=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/05-parsed_hu7967e9de49ac91db256317a4ab9c0b64_293668_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/scrape-emojis-for-slack/img/05-parsed_hu7967e9de49ac91db256317a4ab9c0b64_293668_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;Parsed page example&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;Parsed page example&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;Even though we can use the source code version to find what we need, that&amp;rsquo;s somewhat of a pain, we&amp;rsquo;d need to have the ability to stare at a wall of symbols and parse it in our heads, like Neo and his friends do in the Matrix movies. Fortunately for us, our browser provides us with the &lt;strong&gt;developer tools&lt;/strong&gt;. It might be different depending your browser, but in general you can access the developer tools using the &lt;code&gt;F12&lt;/code&gt; button in your keyboard.&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 310; 
+			flex-basis: 746px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/06-dev-tools.png&#34; data-size=&#34;2780x894&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/06-dev-tools.png&#34;
+			width=&#34;2780&#34;
+			height=&#34;894&#34;
+			srcset=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/06-dev-tools_hu12ceca20846868b8451bb4ebb5b55478_433394_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/scrape-emojis-for-slack/img/06-dev-tools_hu12ceca20846868b8451bb4ebb5b55478_433394_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;Developer tools&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;Developer tools&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;With our handy developer tools we can go ahead and find our selector. First of all, you&amp;rsquo;ll want to be in the &amp;ldquo;Inspector&amp;rdquo; tab of your developer tools. Now, if we hover over some of the HTML we&amp;rsquo;ll see the corresponding content get highlighted on the page.&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 211; 
+			flex-basis: 506px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/07-mouse-hover.png&#34; data-size=&#34;2036x964&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/07-mouse-hover.png&#34;
+			width=&#34;2036&#34;
+			height=&#34;964&#34;
+			srcset=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/07-mouse-hover_hu332f0ebf633da730ad3b02d1822be1dd_390848_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/scrape-emojis-for-slack/img/07-mouse-hover_hu332f0ebf633da730ad3b02d1822be1dd_390848_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;Highlighted content&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;Highlighted content&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;We can see that the&amp;rsquo;s some funny looking stuff like &lt;code&gt;&amp;lt;ul class=&amp;quot;groups&amp;quot;&amp;gt;&lt;/code&gt;, these things are called tags, and they&amp;rsquo;re the building blocks of an HTML document, if you&amp;rsquo;ve ever seen an XML file these will look familiar. Tags can be nested, and in this case that&amp;rsquo;s what we&amp;rsquo;re seeing. Tags can have attributes, some tags have required attributes to do their thing, and some attributes can be part of any tag, the &lt;code&gt;class&lt;/code&gt; and &lt;code&gt;id&lt;/code&gt; attributes are examples of this, these attributes have special selector characters, prefixing a class with a dot (e.g., &lt;code&gt;.my-class&lt;/code&gt;) selects all tags with the &lt;code&gt;my-class&lt;/code&gt; class, to select a tag using its &lt;code&gt;id&lt;/code&gt; attribute simple use &lt;code&gt;#&lt;/code&gt; as a prefix. Classes applied to a tag are separated by spaces.&lt;/p&gt;
+&lt;p&gt;Now, like modern computer-savy Hansel and Grettel we&amp;rsquo;ll follow the HTML tags breadcrumbs to what we need. If we unnest tags following the trail to the first emoji we&amp;rsquo;ll get to this:&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 426; 
+			flex-basis: 1024px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/08-breadcrumbs.png&#34; data-size=&#34;2784x652&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/08-breadcrumbs.png&#34;
+			width=&#34;2784&#34;
+			height=&#34;652&#34;
+			srcset=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/08-breadcrumbs_hu8c1d4d48a5da545f22f0b8afe45dd5ae_338346_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/scrape-emojis-for-slack/img/08-breadcrumbs_hu8c1d4d48a5da545f22f0b8afe45dd5ae_338346_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;Follow the breadcrumbs&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;Follow the breadcrumbs&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ve found some interesting stuff here, apparently there are classes like &amp;ldquo;emojis&amp;rdquo; and &amp;ldquo;downloader&amp;rdquo; that can be used to target a single emoji. What we&amp;rsquo;re intesrested in is in the &lt;code&gt;img&lt;/code&gt; tag, which has the &lt;code&gt;src&lt;/code&gt; attribute, this attribute is used to specify the URL to the actual image. If we copy the &lt;code&gt;src&lt;/code&gt; value and pase it on the address bar we get this:&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 405; 
+			flex-basis: 972px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/09-emoji-url.png&#34; data-size=&#34;1588x392&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/09-emoji-url.png&#34;
+			width=&#34;1588&#34;
+			height=&#34;392&#34;
+			srcset=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/09-emoji-url_hu4b4831a20e5b05015d5c21190113af1c_302307_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/scrape-emojis-for-slack/img/09-emoji-url_hu4b4831a20e5b05015d5c21190113af1c_302307_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;Emoji URL&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;Emoji URL&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;Alright! Now that we know what we need let&amp;rsquo;s code it up. We&amp;rsquo;ll be using the &lt;code&gt;read_html&lt;/code&gt; function to read the page, &lt;code&gt;html_elements&lt;/code&gt; to extract elements using selectors, and &lt;code&gt;html_attr&lt;/code&gt; to extract the emoji url.&lt;/p&gt;
+&lt;script src=&#34;https://gist.github.com/keanrawr/9c7ca96057b6e9209bbb440aa662fc30.js?file=step-2.r&#34;&gt;&lt;/script&gt;
+&lt;p&gt;If we execute this code snippet we can verify the result we&amp;rsquo;re getting is what&amp;rsquo;s expected.&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	
+		class=&#34;gallery-image&#34; 
+		style=&#34;
+			flex-grow: 432; 
+			flex-basis: 1039px&#34;
+	&gt;
+	&lt;a href=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/10-emoji-url.png&#34; data-size=&#34;1524x352&#34;&gt;
+		&lt;img src=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/10-emoji-url.png&#34;
+			width=&#34;1524&#34;
+			height=&#34;352&#34;
+			srcset=&#34;https://keanrawr.github.io/p/scrape-emojis-for-slack/img/10-emoji-url_hudfe5ec68b28cf16e7be91be2002c3264_157131_480x0_resize_box_3.png 480w, https://keanrawr.github.io/p/scrape-emojis-for-slack/img/10-emoji-url_hudfe5ec68b28cf16e7be91be2002c3264_157131_1024x0_resize_box_3.png 1024w&#34;
+			loading=&#34;lazy&#34;
+			alt=&#34;Emoji links&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;Emoji links&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;📝 We could also leverage a browser extension like &lt;a class=&#34;link&#34; href=&#34;https://chrome.google.com/webstore/detail/css-selector/dobcgekgcmhjmfahepgbpmiaejlpaalc?hl=en&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;CSS selector&lt;/a&gt;, but I find them to be redundant. There are cases when your target might be so complex that using an extension to find the correct selector is beneficial, but in my experience, those cases are the exceptions rather than the rule&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;save-the-emojis-locally&#34;&gt;Save the emojis locally&lt;/h2&gt;
+&lt;p&gt;The only missing puzzle piece is a way to save our emoji files locally. Fortunatelly for us, R has a built-in &lt;code&gt;download.file&lt;/code&gt; method that we can use. This method only requires the URL and the destination for the file to be saved, we already have the URLs, we now need to define the destination. Since I&amp;rsquo;m really bad at regex and R&amp;rsquo;s regex support doesn&amp;rsquo;t make it any easier for me, we&amp;rsquo;ll use the &lt;code&gt;stringr&lt;/code&gt; package.&lt;/p&gt;
+&lt;script src=&#34;https://gist.github.com/keanrawr/9c7ca96057b6e9209bbb440aa662fc30.js?file=step-3.r&#34;&gt;&lt;/script&gt;
+&lt;p&gt;Now we can put everything together!&lt;/p&gt;
+&lt;script src=&#34;https://gist.github.com/keanrawr/9c7ca96057b6e9209bbb440aa662fc30.js?file=scrape-emojis.r&#34;&gt;&lt;/script&gt;
+&lt;p&gt;And that&amp;rsquo;s it! With less than 30 lines of R code we were able to download a bunch of meow emojis that are ready to be dropped in some slack converstations with my coworkers.&lt;/p&gt;
+&lt;h2 id=&#34;optional-add-them-to-a-slack-workspace&#34;&gt;(Optional) Add them to a slack workspace&lt;/h2&gt;
+&lt;p&gt;Once we have all our files downloaded we can add them to our slack workspace. Slack doesn&amp;rsquo;t provide support for bulk uploads out of the box, but we can use the &lt;a class=&#34;link&#34; href=&#34;https://chrome.google.com/webstore/detail/neutral-face-emoji-tools/anchoacphlfbdomdlomnbbfhcmcdmjej&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Neutral Face Emoji Tools&lt;/a&gt; browser extension to help with that. If you&amp;rsquo;re going to be using the extension, I recommend to not upload more than 20 emojis at a time, or you&amp;rsquo;ll hit a limit on the number of emojis to upload. Any emojis that don&amp;rsquo;t go through, can be easily identified and retry to upload.&lt;/p&gt;
+&lt;h2 id=&#34;final-thoughs&#34;&gt;Final thoughs&lt;/h2&gt;
+&lt;p&gt;Hope this small tutorial helps anyone other than future me for reference on downloading emoji packs. I&amp;rsquo;m working on putting together a more complex use case of WS to scrape a dataset to use in an actual analysis. Until then, see you around.&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Hosting mlflow on Raspberry Pi Behind nginx</title>
         <link>https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</link>
         <pubDate>Tue, 04 Jan 2022 00:00:00 +0000</pubDate>
@@ -62,19 +327,19 @@
 &lt;/figure&gt;&lt;/p&gt;
 &lt;h2 id=&#34;setting-up-backend-storage&#34;&gt;Setting up backend storage&lt;/h2&gt;
 &lt;p&gt;Docker is a great tool because it lets us deploy a number of tools fast and easy, plus it has a lot of official images, one of which is postgres. To run a postgres docker container there are a couple of things that we need to define, the basic syntax is:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker run -d --name container-name &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  -e &lt;span class=&#34;nv&#34;&gt;POSTGRES_PASSWORD&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;mysecretpassword &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  postgres
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The only required environment variable is &lt;code&gt;POSTGRES_PASSWORD&lt;/code&gt;, the default user name is &amp;ldquo;postgres&amp;rdquo; and the default database name is whatever the user is, you can learn more about the docker image in the &lt;a class=&#34;link&#34; href=&#34;https://hub.docker.com/_/postgres&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -d --name container-name &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  -e &lt;span class=&#34;nv&#34;&gt;POSTGRES_PASSWORD&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;mysecretpassword &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  postgres
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The only required environment variable is &lt;code&gt;POSTGRES_PASSWORD&lt;/code&gt;, the default user name is &amp;ldquo;postgres&amp;rdquo; and the default database name is whatever the user is, you can learn more about the docker image in the &lt;a class=&#34;link&#34; href=&#34;https://hub.docker.com/_/postgres&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;official documentation&lt;/a&gt;. This is good enough to get you started, but we suggest you declare at least a couple more arguments:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker run -d -p 5432:5432 &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --name mlflow-backend &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --restart unless-stopped &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  -e &lt;span class=&#34;nv&#34;&gt;POSTGRES_USER&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;mlflow &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  -e &lt;span class=&#34;nv&#34;&gt;POSTGRES_PASSWORD&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;supersecretpassword &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  -e &lt;span class=&#34;nv&#34;&gt;POSTGRES_DB&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;mlflow &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  postgres:14
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s break the command down:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -d -p 5432:5432 &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --name mlflow-backend &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --restart unless-stopped &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  -e &lt;span class=&#34;nv&#34;&gt;POSTGRES_USER&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;mlflow &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  -e &lt;span class=&#34;nv&#34;&gt;POSTGRES_PASSWORD&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;supersecretpassword &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  -e &lt;span class=&#34;nv&#34;&gt;POSTGRES_DB&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;mlflow &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  postgres:14
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s break the command down:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;-d&lt;/code&gt; runs the container in detached mode&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;-p&lt;/code&gt; specifies port mappings, it&amp;rsquo;s always a good practice to specify this in case you want to specify a different port&lt;/li&gt;
@@ -196,25 +461,25 @@
 	
 &lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;In the new tab that was opened click on the &amp;ldquo;JSON&amp;rdquo; tab to define the new policy using JSON. Paste the following text and don&amp;rsquo;t forget to change the bucket name for your bucket name:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-    &lt;span class=&#34;nt&#34;&gt;&amp;#34;Version&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;2012-10-17&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-    &lt;span class=&#34;nt&#34;&gt;&amp;#34;Statement&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
-        &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-            &lt;span class=&#34;nt&#34;&gt;&amp;#34;Effect&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;Allow&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-            &lt;span class=&#34;nt&#34;&gt;&amp;#34;Action&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
-                &lt;span class=&#34;s2&#34;&gt;&amp;#34;s3:PutObject&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-                &lt;span class=&#34;s2&#34;&gt;&amp;#34;s3:GetObject&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-                &lt;span class=&#34;s2&#34;&gt;&amp;#34;s3:ListBucket&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-                &lt;span class=&#34;s2&#34;&gt;&amp;#34;s3:DeleteObject&amp;#34;&lt;/span&gt;
-            &lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
-            &lt;span class=&#34;nt&#34;&gt;&amp;#34;Resource&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
-                &lt;span class=&#34;s2&#34;&gt;&amp;#34;arn:aws:s3:::YOUR_BUCKET_NAME/*&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-                &lt;span class=&#34;s2&#34;&gt;&amp;#34;arn:aws:s3:::YOUR_BUCKET_NAME&amp;#34;&lt;/span&gt;
-            &lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
-        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    &lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This policy ensures that the user only has access to the bucket of your choosing.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;Version&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;2012-10-17&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;Statement&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;nt&#34;&gt;&amp;#34;Effect&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;Allow&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;nt&#34;&gt;&amp;#34;Action&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;s2&#34;&gt;&amp;#34;s3:PutObject&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;s2&#34;&gt;&amp;#34;s3:GetObject&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;s2&#34;&gt;&amp;#34;s3:ListBucket&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;s2&#34;&gt;&amp;#34;s3:DeleteObject&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;],&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;nt&#34;&gt;&amp;#34;Resource&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;s2&#34;&gt;&amp;#34;arn:aws:s3:::YOUR_BUCKET_NAME/*&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;s2&#34;&gt;&amp;#34;arn:aws:s3:::YOUR_BUCKET_NAME&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This policy ensures that the user only has access to the bucket of your choosing.&lt;/p&gt;
 &lt;p&gt;&lt;figure 
 	
 		class=&#34;gallery-image&#34; 
@@ -288,35 +553,35 @@ aws_secret_access_key = USER_SECRET_ACCESS_KEY
 &lt;h2 id=&#34;setting-up-mlflow-server&#34;&gt;Setting up mlflow server&lt;/h2&gt;
 &lt;p&gt;We&amp;rsquo;ll be using a python virtual environment to isolate our mlflow dependencies and other requirements. But you can always choose to not use a virtual environment.&lt;/p&gt;
 &lt;p&gt;Logged into your raspberry pi run the following commands&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# create a diretory for our instalation&lt;/span&gt;
-mkdir mlflow
-&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; mlflow
-&lt;span class=&#34;c1&#34;&gt;# create virtual environment and activate it&lt;/span&gt;
-python3 -m venv venv
-&lt;span class=&#34;nb&#34;&gt;source&lt;/span&gt; venv/bin/activate
-&lt;span class=&#34;c1&#34;&gt;# install dependencies&lt;/span&gt;
-sudo apt update
-sudo apt install awscli
-pip install mlflow&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;extras&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; psycopg2-binary boto3
-pip install --upgrade awscli
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we can run the mlflow server. For this example we&amp;rsquo;ll be writing the postgres credentials in plain text, but this is something that could be setup as environment variables. Run only one of these commands:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# local storage for artifacts&lt;/span&gt;
-nohup mlflow server &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --host 127.0.0.1 --port &lt;span class=&#34;m&#34;&gt;5000&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;amp;&lt;/span&gt;
-
-&lt;span class=&#34;c1&#34;&gt;# s3 artifact starage&lt;/span&gt;
-nohup mlflow server &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --default-artifact-root s3://some-bucket-name &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --host 127.0.0.1 --port &lt;span class=&#34;m&#34;&gt;5000&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;amp;&lt;/span&gt;
-
-&lt;span class=&#34;c1&#34;&gt;# s3 artifact starage with customs root&lt;/span&gt;
-nohup mlflow server &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --default-artifact-root s3://some-bucket-name/custom-artifact-root &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --host 127.0.0.1 --port &lt;span class=&#34;m&#34;&gt;5000&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;amp;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s break the command down:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# create a diretory for our instalation&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mkdir mlflow
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; mlflow
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# create virtual environment and activate it&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;python3 -m venv venv
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;source&lt;/span&gt; venv/bin/activate
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# install dependencies&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo apt update
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo apt install awscli
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;pip install mlflow&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;extras&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; psycopg2-binary boto3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;pip install --upgrade awscli
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we can run the mlflow server. For this example we&amp;rsquo;ll be writing the postgres credentials in plain text, but this is something that could be setup as environment variables. Run only one of these commands:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# local storage for artifacts&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;nohup mlflow server &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --host 127.0.0.1 --port &lt;span class=&#34;m&#34;&gt;5000&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;amp;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# s3 artifact starage&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;nohup mlflow server &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --default-artifact-root s3://some-bucket-name &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --host 127.0.0.1 --port &lt;span class=&#34;m&#34;&gt;5000&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;amp;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# s3 artifact starage with customs root&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;nohup mlflow server &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --default-artifact-root s3://some-bucket-name/custom-artifact-root &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --host 127.0.0.1 --port &lt;span class=&#34;m&#34;&gt;5000&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;amp;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let&amp;rsquo;s break the command down:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;nohup&lt;/code&gt; runs our command in the backgroug&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;--backend-store-uri&lt;/code&gt; is the URI to our docker postgres container&lt;/li&gt;
@@ -326,24 +591,24 @@ nohup mlflow server &lt;span class=&#34;se&#34;&gt;\
 &lt;p&gt;If you use your browser to navigate to your raspberry pi&amp;rsquo;s IP and port (e.g. http://192.168.100.15:5000), you should see the mlflow UI (assuming that you have have the port open in your Pi). If your Pi isn&amp;rsquo;t onfigured to allow connections on the specified port. Allowing trafic on ports is out of the scope of this post, but there are great resources out there on how to open ports for connections.&lt;/p&gt;
 &lt;h2 id=&#34;setting-up-nginx&#34;&gt;Setting up nginx&lt;/h2&gt;
 &lt;p&gt;Finally we&amp;rsquo;ll setup nginx as a reverse proxy to handle traffic to our mlflow server using http basic authentication. Note that we&amp;rsquo;re assuming you haven&amp;rsquo;t setup a different web server like apache, tomcat or lighttpd. To install nginx run the following commands:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo apt update
-sudo apt install nginx
-sudo apt install apache2-utils
-&lt;span class=&#34;c1&#34;&gt;# verify nginx is running&lt;/span&gt;
-sudo systemctl restart nginx
-
-&lt;span class=&#34;c1&#34;&gt;# create an user for http auth&lt;/span&gt;
-sudo htpasswd -c /etc/nginx/.htpasswd someuser
-
-&lt;span class=&#34;c1&#34;&gt;# configure nginx&lt;/span&gt;
-sudo unlink /etc/nginx/sites-enabled/default
-&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; /etc/nginx/sites-available
-sudo nano mlflow.conf
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For the confifuration paste the following:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo apt update
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo apt install nginx
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo apt install apache2-utils
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# verify nginx is running&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo systemctl restart nginx
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# create an user for http auth&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo htpasswd -c /etc/nginx/.htpasswd someuser
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# configure nginx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo unlink /etc/nginx/sites-enabled/default
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; /etc/nginx/sites-available
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo nano mlflow.conf
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For the confifuration paste the following:&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;server {
   listen 80;
   listen [::]:80;
-  # change server_name to your raspberry pi&#39;s IP
+  # change server_name to your raspberry pi&amp;#39;s IP
   server_name 192.168.x.x;
   # if you have a local DNS setup you can use a custom domain
   # server_name my_local_dns_domain.com;
@@ -353,40 +618,40 @@ sudo nano mlflow.conf
 
   location / {
     proxy_pass http://127.0.0.1:5000;
-    auth_basic &amp;quot;Restricted Content&amp;quot;;
+    auth_basic &amp;#34;Restricted Content&amp;#34;;
     auth_basic_user_file /etc/nginx/.htpasswd;
   }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Final commands to check the configuration was done correctly and reload nginx:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sudo ln -s /etc/nginx/sites-available/mlflow.conf /etc/nginx/sites-enabled/mlflow.conf
-&lt;span class=&#34;c1&#34;&gt;# test configuration&lt;/span&gt;
-sudo nginx -t
-&lt;span class=&#34;c1&#34;&gt;# restart nginx&lt;/span&gt;
-sudo systemctl restart nginx
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;starting-mlflow-on-raspberry-pi-reboot&#34;&gt;Starting mlflow on raspberry pi reboot&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo ln -s /etc/nginx/sites-available/mlflow.conf /etc/nginx/sites-enabled/mlflow.conf
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# test configuration&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo nginx -t
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# restart nginx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo systemctl restart nginx
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;starting-mlflow-on-raspberry-pi-reboot&#34;&gt;Starting mlflow on raspberry pi reboot&lt;/h2&gt;
 &lt;p&gt;Our final step is to make sure that our mlflow server is up even after we reboot our Pi. We can do that with a simple shell script and crontab.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# navigate to our mlflow directory&lt;/span&gt;
-&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; ~/mlflow
-nano start-mlflow.sh
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Paste the the following contents in the script:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#!/bin/bash
-&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
-&lt;span class=&#34;nv&#34;&gt;HERE&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;dirname &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;BASH_SOURCE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[0]&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;pwd&lt;/span&gt; -P &lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;
-
-&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$HERE&lt;/span&gt;
-&lt;span class=&#34;nb&#34;&gt;source&lt;/span&gt; venv/bin/activate
-&lt;span class=&#34;c1&#34;&gt;# use the version of the mlflow command that you chose&lt;/span&gt;
-nohup mlflow server &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --default-artifact-root s3://some-bucket-name/custom-artifact-root &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --host 127.0.0.1 --port &lt;span class=&#34;m&#34;&gt;5000&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;amp;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Use &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;O&lt;/kbd&gt; to save and &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;X&lt;/kbd&gt; to exit.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;chmod +x start-mlflow.sh
-crontab -e
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Paste the following line at the end of the file:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# mlflow tracking server&lt;/span&gt;
-@reboot ~/mlflow/start-mlflow.sh
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And all done! 🎉 Your mlflow tracking server is now live. You can go to your raspberry pi&amp;rsquo;s IP (or domain if you setup a local DNS domain like I did) and you should see your tracking server. It&amp;rsquo;ll ask you for the username you defined in the &lt;a class=&#34;link&#34; href=&#34;#setting-up-nginx&#34; &gt;nginx configuration part&lt;/a&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# navigate to our mlflow directory&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; ~/mlflow
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;nano start-mlflow.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Paste the the following contents in the script:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;HERE&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;dirname &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;BASH_SOURCE&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[0]&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;pwd&lt;/span&gt; -P &lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$HERE&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;source&lt;/span&gt; venv/bin/activate
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# use the version of the mlflow command that you chose&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;nohup mlflow server &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --default-artifact-root s3://some-bucket-name/custom-artifact-root &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  --host 127.0.0.1 --port &lt;span class=&#34;m&#34;&gt;5000&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;amp;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Use &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;O&lt;/kbd&gt; to save and &lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;X&lt;/kbd&gt; to exit.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;chmod +x start-mlflow.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;crontab -e
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Paste the following line at the end of the file:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# mlflow tracking server&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;@reboot ~/mlflow/start-mlflow.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And all done! 🎉 Your mlflow tracking server is now live. You can go to your raspberry pi&amp;rsquo;s IP (or domain if you setup a local DNS domain like I did) and you should see your tracking server. It&amp;rsquo;ll ask you for the username you defined in the &lt;a class=&#34;link&#34; href=&#34;#setting-up-nginx&#34; &gt;nginx configuration part&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;figure 
 	
 		class=&#34;gallery-image&#34; 

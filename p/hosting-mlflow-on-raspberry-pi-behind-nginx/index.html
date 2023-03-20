@@ -187,19 +187,19 @@ if (!doNotTrack) {
 </figure></p>
 <h2 id="setting-up-backend-storage">Setting up backend storage</h2>
 <p>Docker is a great tool because it lets us deploy a number of tools fast and easy, plus it has a lot of official images, one of which is postgres. To run a postgres docker container there are a couple of things that we need to define, the basic syntax is:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker run -d --name container-name <span class="se">\
-</span><span class="se"></span>  -e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>mysecretpassword <span class="se">\
-</span><span class="se"></span>  postgres
-</code></pre></div><p>The only required environment variable is <code>POSTGRES_PASSWORD</code>, the default user name is &ldquo;postgres&rdquo; and the default database name is whatever the user is, you can learn more about the docker image in the <a class="link" href="https://hub.docker.com/_/postgres"  target="_blank" rel="noopener"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run -d --name container-name <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>mysecretpassword <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  postgres
+</span></span></code></pre></div><p>The only required environment variable is <code>POSTGRES_PASSWORD</code>, the default user name is &ldquo;postgres&rdquo; and the default database name is whatever the user is, you can learn more about the docker image in the <a class="link" href="https://hub.docker.com/_/postgres"  target="_blank" rel="noopener"
     >official documentation</a>. This is good enough to get you started, but we suggest you declare at least a couple more arguments:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker run -d -p 5432:5432 <span class="se">\
-</span><span class="se"></span>  --name mlflow-backend <span class="se">\
-</span><span class="se"></span>  --restart unless-stopped <span class="se">\
-</span><span class="se"></span>  -e <span class="nv">POSTGRES_USER</span><span class="o">=</span>mlflow <span class="se">\
-</span><span class="se"></span>  -e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>supersecretpassword <span class="se">\
-</span><span class="se"></span>  -e <span class="nv">POSTGRES_DB</span><span class="o">=</span>mlflow <span class="se">\
-</span><span class="se"></span>  postgres:14
-</code></pre></div><p>Let&rsquo;s break the command down:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run -d -p 5432:5432 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --name mlflow-backend <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --restart unless-stopped <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -e <span class="nv">POSTGRES_USER</span><span class="o">=</span>mlflow <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -e <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>supersecretpassword <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -e <span class="nv">POSTGRES_DB</span><span class="o">=</span>mlflow <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  postgres:14
+</span></span></code></pre></div><p>Let&rsquo;s break the command down:</p>
 <ul>
 <li><code>-d</code> runs the container in detached mode</li>
 <li><code>-p</code> specifies port mappings, it&rsquo;s always a good practice to specify this in case you want to specify a different port</li>
@@ -321,25 +321,25 @@ if (!doNotTrack) {
 	
 </figure></p>
 <p>In the new tab that was opened click on the &ldquo;JSON&rdquo; tab to define the new policy using JSON. Paste the following text and don&rsquo;t forget to change the bucket name for your bucket name:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
-    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
-    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
-            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&#34;s3:PutObject&#34;</span><span class="p">,</span>
-                <span class="s2">&#34;s3:GetObject&#34;</span><span class="p">,</span>
-                <span class="s2">&#34;s3:ListBucket&#34;</span><span class="p">,</span>
-                <span class="s2">&#34;s3:DeleteObject&#34;</span>
-            <span class="p">],</span>
-            <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&#34;arn:aws:s3:::YOUR_BUCKET_NAME/*&#34;</span><span class="p">,</span>
-                <span class="s2">&#34;arn:aws:s3:::YOUR_BUCKET_NAME&#34;</span>
-            <span class="p">]</span>
-        <span class="p">}</span>
-    <span class="p">]</span>
-<span class="p">}</span>
-</code></pre></div><p>This policy ensures that the user only has access to the bucket of your choosing.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;s3:PutObject&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;s3:GetObject&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;s3:ListBucket&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;s3:DeleteObject&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">],</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;arn:aws:s3:::YOUR_BUCKET_NAME/*&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;arn:aws:s3:::YOUR_BUCKET_NAME&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>This policy ensures that the user only has access to the bucket of your choosing.</p>
 <p><figure 
 	
 		class="gallery-image" 
@@ -413,35 +413,35 @@ aws_secret_access_key = USER_SECRET_ACCESS_KEY
 <h2 id="setting-up-mlflow-server">Setting up mlflow server</h2>
 <p>We&rsquo;ll be using a python virtual environment to isolate our mlflow dependencies and other requirements. But you can always choose to not use a virtual environment.</p>
 <p>Logged into your raspberry pi run the following commands</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># create a diretory for our instalation</span>
-mkdir mlflow
-<span class="nb">cd</span> mlflow
-<span class="c1"># create virtual environment and activate it</span>
-python3 -m venv venv
-<span class="nb">source</span> venv/bin/activate
-<span class="c1"># install dependencies</span>
-sudo apt update
-sudo apt install awscli
-pip install mlflow<span class="o">[</span>extras<span class="o">]</span> psycopg2-binary boto3
-pip install --upgrade awscli
-</code></pre></div><p>Now we can run the mlflow server. For this example we&rsquo;ll be writing the postgres credentials in plain text, but this is something that could be setup as environment variables. Run only one of these commands:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># local storage for artifacts</span>
-nohup mlflow server <span class="se">\
-</span><span class="se"></span>  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow <span class="se">\
-</span><span class="se"></span>  --host 127.0.0.1 --port <span class="m">5000</span> <span class="p">&amp;</span>
-
-<span class="c1"># s3 artifact starage</span>
-nohup mlflow server <span class="se">\
-</span><span class="se"></span>  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow <span class="se">\
-</span><span class="se"></span>  --default-artifact-root s3://some-bucket-name <span class="se">\
-</span><span class="se"></span>  --host 127.0.0.1 --port <span class="m">5000</span> <span class="p">&amp;</span>
-
-<span class="c1"># s3 artifact starage with customs root</span>
-nohup mlflow server <span class="se">\
-</span><span class="se"></span>  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow <span class="se">\
-</span><span class="se"></span>  --default-artifact-root s3://some-bucket-name/custom-artifact-root <span class="se">\
-</span><span class="se"></span>  --host 127.0.0.1 --port <span class="m">5000</span> <span class="p">&amp;</span>
-</code></pre></div><p>Let&rsquo;s break the command down:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># create a diretory for our instalation</span>
+</span></span><span class="line"><span class="cl">mkdir mlflow
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> mlflow
+</span></span><span class="line"><span class="cl"><span class="c1"># create virtual environment and activate it</span>
+</span></span><span class="line"><span class="cl">python3 -m venv venv
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> venv/bin/activate
+</span></span><span class="line"><span class="cl"><span class="c1"># install dependencies</span>
+</span></span><span class="line"><span class="cl">sudo apt update
+</span></span><span class="line"><span class="cl">sudo apt install awscli
+</span></span><span class="line"><span class="cl">pip install mlflow<span class="o">[</span>extras<span class="o">]</span> psycopg2-binary boto3
+</span></span><span class="line"><span class="cl">pip install --upgrade awscli
+</span></span></code></pre></div><p>Now we can run the mlflow server. For this example we&rsquo;ll be writing the postgres credentials in plain text, but this is something that could be setup as environment variables. Run only one of these commands:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># local storage for artifacts</span>
+</span></span><span class="line"><span class="cl">nohup mlflow server <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --host 127.0.0.1 --port <span class="m">5000</span> <span class="p">&amp;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># s3 artifact starage</span>
+</span></span><span class="line"><span class="cl">nohup mlflow server <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --default-artifact-root s3://some-bucket-name <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --host 127.0.0.1 --port <span class="m">5000</span> <span class="p">&amp;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># s3 artifact starage with customs root</span>
+</span></span><span class="line"><span class="cl">nohup mlflow server <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --default-artifact-root s3://some-bucket-name/custom-artifact-root <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --host 127.0.0.1 --port <span class="m">5000</span> <span class="p">&amp;</span>
+</span></span></code></pre></div><p>Let&rsquo;s break the command down:</p>
 <ul>
 <li><code>nohup</code> runs our command in the backgroug</li>
 <li><code>--backend-store-uri</code> is the URI to our docker postgres container</li>
@@ -451,24 +451,24 @@ nohup mlflow server <span class="se">\
 <p>If you use your browser to navigate to your raspberry pi&rsquo;s IP and port (e.g. http://192.168.100.15:5000), you should see the mlflow UI (assuming that you have have the port open in your Pi). If your Pi isn&rsquo;t onfigured to allow connections on the specified port. Allowing trafic on ports is out of the scope of this post, but there are great resources out there on how to open ports for connections.</p>
 <h2 id="setting-up-nginx">Setting up nginx</h2>
 <p>Finally we&rsquo;ll setup nginx as a reverse proxy to handle traffic to our mlflow server using http basic authentication. Note that we&rsquo;re assuming you haven&rsquo;t setup a different web server like apache, tomcat or lighttpd. To install nginx run the following commands:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo apt update
-sudo apt install nginx
-sudo apt install apache2-utils
-<span class="c1"># verify nginx is running</span>
-sudo systemctl restart nginx
-
-<span class="c1"># create an user for http auth</span>
-sudo htpasswd -c /etc/nginx/.htpasswd someuser
-
-<span class="c1"># configure nginx</span>
-sudo unlink /etc/nginx/sites-enabled/default
-<span class="nb">cd</span> /etc/nginx/sites-available
-sudo nano mlflow.conf
-</code></pre></div><p>For the confifuration paste the following:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt update
+</span></span><span class="line"><span class="cl">sudo apt install nginx
+</span></span><span class="line"><span class="cl">sudo apt install apache2-utils
+</span></span><span class="line"><span class="cl"><span class="c1"># verify nginx is running</span>
+</span></span><span class="line"><span class="cl">sudo systemctl restart nginx
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># create an user for http auth</span>
+</span></span><span class="line"><span class="cl">sudo htpasswd -c /etc/nginx/.htpasswd someuser
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># configure nginx</span>
+</span></span><span class="line"><span class="cl">sudo unlink /etc/nginx/sites-enabled/default
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /etc/nginx/sites-available
+</span></span><span class="line"><span class="cl">sudo nano mlflow.conf
+</span></span></code></pre></div><p>For the confifuration paste the following:</p>
 <pre tabindex="0"><code>server {
   listen 80;
   listen [::]:80;
-  # change server_name to your raspberry pi's IP
+  # change server_name to your raspberry pi&#39;s IP
   server_name 192.168.x.x;
   # if you have a local DNS setup you can use a custom domain
   # server_name my_local_dns_domain.com;
@@ -478,40 +478,40 @@ sudo nano mlflow.conf
 
   location / {
     proxy_pass http://127.0.0.1:5000;
-    auth_basic &quot;Restricted Content&quot;;
+    auth_basic &#34;Restricted Content&#34;;
     auth_basic_user_file /etc/nginx/.htpasswd;
   }
 }
 </code></pre><p>Final commands to check the configuration was done correctly and reload nginx:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo ln -s /etc/nginx/sites-available/mlflow.conf /etc/nginx/sites-enabled/mlflow.conf
-<span class="c1"># test configuration</span>
-sudo nginx -t
-<span class="c1"># restart nginx</span>
-sudo systemctl restart nginx
-</code></pre></div><h2 id="starting-mlflow-on-raspberry-pi-reboot">Starting mlflow on raspberry pi reboot</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo ln -s /etc/nginx/sites-available/mlflow.conf /etc/nginx/sites-enabled/mlflow.conf
+</span></span><span class="line"><span class="cl"><span class="c1"># test configuration</span>
+</span></span><span class="line"><span class="cl">sudo nginx -t
+</span></span><span class="line"><span class="cl"><span class="c1"># restart nginx</span>
+</span></span><span class="line"><span class="cl">sudo systemctl restart nginx
+</span></span></code></pre></div><h2 id="starting-mlflow-on-raspberry-pi-reboot">Starting mlflow on raspberry pi reboot</h2>
 <p>Our final step is to make sure that our mlflow server is up even after we reboot our Pi. We can do that with a simple shell script and crontab.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># navigate to our mlflow directory</span>
-<span class="nb">cd</span> ~/mlflow
-nano start-mlflow.sh
-</code></pre></div><p>Paste the the following contents in the script:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
-</span><span class="cp"></span>
-<span class="nv">HERE</span><span class="o">=</span><span class="k">$(</span> <span class="nb">cd</span> <span class="s2">&#34;</span><span class="k">$(</span>dirname <span class="s2">&#34;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">[0]</span><span class="si">}</span><span class="s2">&#34;</span><span class="k">)</span><span class="s2">&#34;</span> <span class="p">;</span> <span class="nb">pwd</span> -P <span class="k">)</span>
-
-<span class="nb">cd</span> <span class="nv">$HERE</span>
-<span class="nb">source</span> venv/bin/activate
-<span class="c1"># use the version of the mlflow command that you chose</span>
-nohup mlflow server <span class="se">\
-</span><span class="se"></span>  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow <span class="se">\
-</span><span class="se"></span>  --default-artifact-root s3://some-bucket-name/custom-artifact-root <span class="se">\
-</span><span class="se"></span>  --host 127.0.0.1 --port <span class="m">5000</span> <span class="p">&amp;</span>
-</code></pre></div><p>Use <kbd>Ctrl</kbd> + <kbd>O</kbd> to save and <kbd>Ctrl</kbd> + <kbd>X</kbd> to exit.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">chmod +x start-mlflow.sh
-crontab -e
-</code></pre></div><p>Paste the following line at the end of the file:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># mlflow tracking server</span>
-@reboot ~/mlflow/start-mlflow.sh
-</code></pre></div><p>And all done! 🎉 Your mlflow tracking server is now live. You can go to your raspberry pi&rsquo;s IP (or domain if you setup a local DNS domain like I did) and you should see your tracking server. It&rsquo;ll ask you for the username you defined in the <a class="link" href="#setting-up-nginx" >nginx configuration part</a>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># navigate to our mlflow directory</span>
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ~/mlflow
+</span></span><span class="line"><span class="cl">nano start-mlflow.sh
+</span></span></code></pre></div><p>Paste the the following contents in the script:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="nv">HERE</span><span class="o">=</span><span class="k">$(</span> <span class="nb">cd</span> <span class="s2">&#34;</span><span class="k">$(</span>dirname <span class="s2">&#34;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">[0]</span><span class="si">}</span><span class="s2">&#34;</span><span class="k">)</span><span class="s2">&#34;</span> <span class="p">;</span> <span class="nb">pwd</span> -P <span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> <span class="nv">$HERE</span>
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> venv/bin/activate
+</span></span><span class="line"><span class="cl"><span class="c1"># use the version of the mlflow command that you chose</span>
+</span></span><span class="line"><span class="cl">nohup mlflow server <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --backend-store-uri postgresql://mlflow:password@localhost:5432/mlflow <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --default-artifact-root s3://some-bucket-name/custom-artifact-root <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --host 127.0.0.1 --port <span class="m">5000</span> <span class="p">&amp;</span>
+</span></span></code></pre></div><p>Use <kbd>Ctrl</kbd> + <kbd>O</kbd> to save and <kbd>Ctrl</kbd> + <kbd>X</kbd> to exit.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">chmod +x start-mlflow.sh
+</span></span><span class="line"><span class="cl">crontab -e
+</span></span></code></pre></div><p>Paste the following line at the end of the file:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># mlflow tracking server</span>
+</span></span><span class="line"><span class="cl">@reboot ~/mlflow/start-mlflow.sh
+</span></span></code></pre></div><p>And all done! 🎉 Your mlflow tracking server is now live. You can go to your raspberry pi&rsquo;s IP (or domain if you setup a local DNS domain like I did) and you should see your tracking server. It&rsquo;ll ask you for the username you defined in the <a class="link" href="#setting-up-nginx" >nginx configuration part</a>.</p>
 <p><figure 
 	
 		class="gallery-image" 
@@ -596,7 +596,7 @@ crontab -e
     <div class="disqus-container">
     <div id="disqus_thread"></div>
 <script type="application/javascript">
-    var disqus_config = function () {
+    window.disqus_config = function () {
     
     
     
@@ -643,7 +643,7 @@ crontab -e
         
             2021 - 
         
-        2022 Kean Rawr
+        2023 Kean Rawr
     </section>
     
     <section class="powerby">

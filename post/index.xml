@@ -6,7 +6,17 @@
     <description>Recent content in Posts on Kean Rawr</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 04 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://keanrawr.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 19 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://keanrawr.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Scrape emojis for slack</title>
+      <link>https://keanrawr.github.io/p/scrape-emojis-for-slack/</link>
+      <pubDate>Sun, 19 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://keanrawr.github.io/p/scrape-emojis-for-slack/</guid>
+      <description>Why do this? One of the most common pieces of advice that data science newbies get is to learn web scraping, this is usually acompanied by an argument like: &amp;ldquo;WS is a really important skill for data science, since being able to scrape your own dataset from the web comes in handy&amp;rdquo;.
+As a person who dives head first into anything that&amp;rsquo;s deemed &amp;ldquo;highly valuable&amp;rdquo; I went head first into learning web scraping.</description>
+    </item>
+    
     <item>
       <title>Hosting mlflow on Raspberry Pi Behind nginx</title>
       <link>https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</link>

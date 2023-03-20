@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Using R and rvest to scrape emojis for your slack workspace'><title>Scrape emojis for slack</title>
+
+<link rel='canonical' href='https://keanrawr.github.io/p/scrape-emojis-for-slack/'>
+
+<link rel="stylesheet" href="/scss/style.min.d0114fe9ba1169c5d7ddf92def6ba4c59460698b0c487ee1a43f4fc611e5c131.css"><meta property='og:title' content='Scrape emojis for slack'>
+<meta property='og:description' content='Using R and rvest to scrape emojis for your slack workspace'>
+<meta property='og:url' content='https://keanrawr.github.io/p/scrape-emojis-for-slack/'>
+<meta property='og:site_name' content='Kean Rawr'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='r' /><meta property='article:tag' content='web scraping' /><meta property='article:tag' content='slack' /><meta property='article:tag' content='emojis' /><meta property='article:published_time' content='2023-03-19T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-03-19T00:00:00&#43;00:00'/><meta property='og:image' content='https://keanrawr.github.io/p/scrape-emojis-for-slack/banner.jpg' />
+<meta name="twitter:site" content="@KeanRawr">
+    <meta name="twitter:creator" content="@KeanRawr"><meta name="twitter:title" content="Scrape emojis for slack">
+<meta name="twitter:description" content="Using R and rvest to scrape emojis for your slack workspace"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://keanrawr.github.io/p/scrape-emojis-for-slack/banner.jpg' />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7859P9KGNF"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7859P9KGNF', { 'anonymize_ip': false });
+}
+</script>
+
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/scrape-emojis-for-slack/">
+                <img src="/p/scrape-emojis-for-slack/banner_hu8c5b92596334b1bbc9202462769c8dfa_166775_800x0_resize_q75_box.jpg"
+                        srcset="/p/scrape-emojis-for-slack/banner_hu8c5b92596334b1bbc9202462769c8dfa_166775_800x0_resize_q75_box.jpg 800w, /p/scrape-emojis-for-slack/banner_hu8c5b92596334b1bbc9202462769c8dfa_166775_1600x0_resize_q75_box.jpg 1600w"
+                        width="800" 
+                        height="267" 
+                        loading="lazy"
+                        alt="Featured image of post Scrape emojis for slack" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/scrape-emojis-for-slack/">Scrape emojis for slack</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        Using R and rvest to scrape emojis for your slack workspace
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 19, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    8 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="why-do-this">Why do this?</h1>
+<p>One of the most common pieces of advice that data science newbies get is to learn web scraping, this is usually acompanied by an argument like: &ldquo;WS is a really important skill for data science, since being able to scrape your own dataset from the web comes in handy&rdquo;.</p>
+<p>As a person who dives head first into anything that&rsquo;s deemed &ldquo;highly valuable&rdquo; I went head first into learning web scraping. However, after years in my data science journey, rarely have I had to scrape my own datasets. And this is to be expected, most companies can&rsquo;t even handle the amount of existing data they have at hand, or wouldn&rsquo;t mind paying for some API service or data broker to provide additional datasets.</p>
+<p>This doesn&rsquo;t mean I think learning web scraping isn&rsquo;t useful, on the contrary, I find WS to be important, but not because you&rsquo;ll have to scrape your datasets. I think that WS is one of the easiest ways to dip your toe into how the web works. As a data scientist you&rsquo;ll eventually find yourself in contact with some form of web service, it could be some endpoint from your company, or a third-party vendor, that provides some data you need, or when putting some model in production. Regardless of the way, shape or form that this interactions comes, knowing your way around what terms like &ldquo;request&rdquo;, &ldquo;authentication&rdquo; or &ldquo;body&rdquo; mean, will make these much easier.</p>
+<p>The previous being said, we&rsquo;ll go through a simple and fun use case that serves as a light introduction to WS, and as a side effect provides you with a bunch of emojis for your slack workspace!</p>
+<h2 id="what-is-web-scraping">What is web scraping?</h2>
+<p>There have been many blog posts written on the meaning of WS, so I won&rsquo;t waste too much time defining it.</p>
+<p>Web scraping is the process of requesting a web page containing data you&rsquo;re interested in, and parsing out said information for some purpose, e.g., downstream processing, or running a text analysis.</p>
+<h2 id="what-well-be-doing">What we&rsquo;ll be doing</h2>
+<p>We&rsquo;ll be using the <a class="link" href="https://rvest.tidyverse.org/"  target="_blank" rel="noopener"
+    >rvest</a> R package to scrape <a class="link" href="https://slackmojis.com"  target="_blank" rel="noopener"
+    >slackmojis.com</a> for the <a class="link" href="https://slackmojis.com/categories/25-blob-cats-emojis"  target="_blank" rel="noopener"
+    >blob cats category</a>. My employer&rsquo;s slack workspace is lacking on some meow action. We&rsquo;ll be following these rough steps:</p>
+<ol>
+<li>Identify the target URL(s)</li>
+<li>Identify the selector to the emojis</li>
+<li>Save the emojis locally</li>
+<li>(Optional) Add them to a slack workspace</li>
+</ol>
+<p>To follow along you&rsquo;ll need:</p>
+<ul>
+<li>A working installation of R</li>
+<li>The <code>rvest</code> and <code>stringr</code> R packages</li>
+<li>(Optionally) the Rstudio IDE</li>
+<li>A browser with developer tools (e.g., Chrome, Firefox, Edge, Brave)</li>
+</ul>
+<h2 id="idetify-the-target-urls">Idetify the target URL(s)</h2>
+<p>This one&rsquo;s kind of a freebie right? We already said that we&rsquo;ll be scraping <a class="link" href="https://slackmojis.com/categories/25-blob-cats-emojis"  target="_blank" rel="noopener"
+    >https://slackmojis.com/categories/25-blob-cats-emojis</a> for meow emojis right? Well, we can still do a little more. If we look closely at the page, there&rsquo;s a &ldquo;See More Blob Cats Emojis&rdquo; button.</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 535; 
+			flex-basis: 1284px"
+	>
+	<a href="/p/scrape-emojis-for-slack/img/01-see-more.png" data-size="2344x438">
+		<img src="/p/scrape-emojis-for-slack/img/01-see-more.png"
+			width="2344"
+			height="438"
+			srcset="/p/scrape-emojis-for-slack/img/01-see-more_hub88da78dd9654f293c8a122b9735665d_159444_480x0_resize_box_3.png 480w, /p/scrape-emojis-for-slack/img/01-see-more_hub88da78dd9654f293c8a122b9735665d_159444_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="See more">
+	</a>
+	
+	<figcaption>See more</figcaption>
+	
+</figure></p>
+<p>If we click it we are taken to a page with more emojis, looking at the address bar we notice that it&rsquo;s essentially the same address as before, only with some extra characters: <code>?page=1</code>. This is called a <strong>query string</strong>, and it&rsquo;s something that we use to tell a web application more about the content we&rsquo;re requesting through some parameters and values, the page number in this case.</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 277; 
+			flex-basis: 665px"
+	>
+	<a href="/p/scrape-emojis-for-slack/img/02-query-string.png" data-size="2358x850">
+		<img src="/p/scrape-emojis-for-slack/img/02-query-string.png"
+			width="2358"
+			height="850"
+			srcset="/p/scrape-emojis-for-slack/img/02-query-string_hub1cef62ec343cc53f3dbec0e408ebfdc_202870_480x0_resize_box_3.png 480w, /p/scrape-emojis-for-slack/img/02-query-string_hub1cef62ec343cc53f3dbec0e408ebfdc_202870_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Query string page 1">
+	</a>
+	
+	<figcaption>Query string page 1</figcaption>
+	
+</figure></p>
+<p>Query parameters are specified in the query string, we use the <code>?</code> character to separate the URL from the query string. The structure of a query string follows this format: <code>param1=value1&amp;param2=value2&amp;...</code>.</p>
+<blockquote>
+<p>📝 This is a very simple example where we aren&rsquo;t encoding special characters like a whitespace or a question mark in the parameters or values from our query string.</p>
+</blockquote>
+<p>Why is this useful? well, first of all, you&rsquo;re welcome for some useful knowledge. Second, in cases like this we can leverage this information to make our WS adventure easier.</p>
+<p>Each emoji page contains a 200x5 grid, with this many emojis per page we only need two pages to get all the images we&rsquo;re interested in, something we can manually handle, but imagine that each page contained only 10 emojis, if that were the case, changing the url manually would be really annoying. Let&rsquo;s play with our query parameter, if we set <code>page=0</code> and hit &ldquo;go&rdquo; in our browser we get&hellip;</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 251; 
+			flex-basis: 604px"
+	>
+	<a href="/p/scrape-emojis-for-slack/img/03-query-string.png" data-size="2352x934">
+		<img src="/p/scrape-emojis-for-slack/img/03-query-string.png"
+			width="2352"
+			height="934"
+			srcset="/p/scrape-emojis-for-slack/img/03-query-string_hu9623d0bf0efeeb75f9030ceb1134eb80_241879_480x0_resize_box_3.png 480w, /p/scrape-emojis-for-slack/img/03-query-string_hu9623d0bf0efeeb75f9030ceb1134eb80_241879_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Query string page 0">
+	</a>
+	
+	<figcaption>Query string page 0</figcaption>
+	
+</figure></p>
+<p>The first page! Now we know that we have the ability to programmatically iterate through these pages. This may not be very useful for this particular case, but it might come in handy in other cases.</p>
+<p>Now that we&rsquo;ve identified what our target URLs look like we can write some initial R code to catch this behavior.</p>
+<script src="https://gist.github.com/keanrawr/9c7ca96057b6e9209bbb440aa662fc30.js?file=step-1.r"></script>
+<h2 id="identify-the-selector-to-the-emojis">Identify the selector to the emojis</h2>
+<p>I like to think that selectors are the cornerstone of web scraping, it&rsquo;s how we tell rverst (or any other WS framework) what elements of the page we actually want. To give a brief explanation on what selectors are it&rsquo;s worth exploring what a web page is.</p>
+<p>All web pages are HTML under the hood, Whenever you visit a web page your browser parses the raw HTML, and with the help of <a class="link" href="https://en.wikipedia.org/wiki/CSS"  target="_blank" rel="noopener"
+    >CSS</a> and <a class="link" href="https://en.wikipedia.org/wiki/JavaScript"  target="_blank" rel="noopener"
+    >JavaScript</a> turns it into whatever&rsquo;s in front of you. You might&rsquo;ve entered &ldquo;source mode&rdquo; by accident at one point, since most chromium-based browsers like chrome or modern edge, have this capability.</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 302; 
+			flex-basis: 725px"
+	>
+	<a href="/p/scrape-emojis-for-slack/img/04-source-code.png" data-size="2262x748">
+		<img src="/p/scrape-emojis-for-slack/img/04-source-code.png"
+			width="2262"
+			height="748"
+			srcset="/p/scrape-emojis-for-slack/img/04-source-code_hu49fbae73804018af272427a7cd2f9cdc_320941_480x0_resize_box_3.png 480w, /p/scrape-emojis-for-slack/img/04-source-code_hu49fbae73804018af272427a7cd2f9cdc_320941_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Source code page example">
+	</a>
+	
+	<figcaption>Source code page example</figcaption>
+	
+</figure>
+<figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 213; 
+			flex-basis: 512px"
+	>
+	<a href="/p/scrape-emojis-for-slack/img/05-parsed.png" data-size="2346x1098">
+		<img src="/p/scrape-emojis-for-slack/img/05-parsed.png"
+			width="2346"
+			height="1098"
+			srcset="/p/scrape-emojis-for-slack/img/05-parsed_hu7967e9de49ac91db256317a4ab9c0b64_293668_480x0_resize_box_3.png 480w, /p/scrape-emojis-for-slack/img/05-parsed_hu7967e9de49ac91db256317a4ab9c0b64_293668_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Parsed page example">
+	</a>
+	
+	<figcaption>Parsed page example</figcaption>
+	
+</figure></p>
+<p>Even though we can use the source code version to find what we need, that&rsquo;s somewhat of a pain, we&rsquo;d need to have the ability to stare at a wall of symbols and parse it in our heads, like Neo and his friends do in the Matrix movies. Fortunately for us, our browser provides us with the <strong>developer tools</strong>. It might be different depending your browser, but in general you can access the developer tools using the <code>F12</code> button in your keyboard.</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 310; 
+			flex-basis: 746px"
+	>
+	<a href="/p/scrape-emojis-for-slack/img/06-dev-tools.png" data-size="2780x894">
+		<img src="/p/scrape-emojis-for-slack/img/06-dev-tools.png"
+			width="2780"
+			height="894"
+			srcset="/p/scrape-emojis-for-slack/img/06-dev-tools_hu12ceca20846868b8451bb4ebb5b55478_433394_480x0_resize_box_3.png 480w, /p/scrape-emojis-for-slack/img/06-dev-tools_hu12ceca20846868b8451bb4ebb5b55478_433394_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Developer tools">
+	</a>
+	
+	<figcaption>Developer tools</figcaption>
+	
+</figure></p>
+<p>With our handy developer tools we can go ahead and find our selector. First of all, you&rsquo;ll want to be in the &ldquo;Inspector&rdquo; tab of your developer tools. Now, if we hover over some of the HTML we&rsquo;ll see the corresponding content get highlighted on the page.</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 211; 
+			flex-basis: 506px"
+	>
+	<a href="/p/scrape-emojis-for-slack/img/07-mouse-hover.png" data-size="2036x964">
+		<img src="/p/scrape-emojis-for-slack/img/07-mouse-hover.png"
+			width="2036"
+			height="964"
+			srcset="/p/scrape-emojis-for-slack/img/07-mouse-hover_hu332f0ebf633da730ad3b02d1822be1dd_390848_480x0_resize_box_3.png 480w, /p/scrape-emojis-for-slack/img/07-mouse-hover_hu332f0ebf633da730ad3b02d1822be1dd_390848_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Highlighted content">
+	</a>
+	
+	<figcaption>Highlighted content</figcaption>
+	
+</figure></p>
+<p>We can see that the&rsquo;s some funny looking stuff like <code>&lt;ul class=&quot;groups&quot;&gt;</code>, these things are called tags, and they&rsquo;re the building blocks of an HTML document, if you&rsquo;ve ever seen an XML file these will look familiar. Tags can be nested, and in this case that&rsquo;s what we&rsquo;re seeing. Tags can have attributes, some tags have required attributes to do their thing, and some attributes can be part of any tag, the <code>class</code> and <code>id</code> attributes are examples of this, these attributes have special selector characters, prefixing a class with a dot (e.g., <code>.my-class</code>) selects all tags with the <code>my-class</code> class, to select a tag using its <code>id</code> attribute simple use <code>#</code> as a prefix. Classes applied to a tag are separated by spaces.</p>
+<p>Now, like modern computer-savy Hansel and Grettel we&rsquo;ll follow the HTML tags breadcrumbs to what we need. If we unnest tags following the trail to the first emoji we&rsquo;ll get to this:</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 426; 
+			flex-basis: 1024px"
+	>
+	<a href="/p/scrape-emojis-for-slack/img/08-breadcrumbs.png" data-size="2784x652">
+		<img src="/p/scrape-emojis-for-slack/img/08-breadcrumbs.png"
+			width="2784"
+			height="652"
+			srcset="/p/scrape-emojis-for-slack/img/08-breadcrumbs_hu8c1d4d48a5da545f22f0b8afe45dd5ae_338346_480x0_resize_box_3.png 480w, /p/scrape-emojis-for-slack/img/08-breadcrumbs_hu8c1d4d48a5da545f22f0b8afe45dd5ae_338346_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Follow the breadcrumbs">
+	</a>
+	
+	<figcaption>Follow the breadcrumbs</figcaption>
+	
+</figure></p>
+<p>We&rsquo;ve found some interesting stuff here, apparently there are classes like &ldquo;emojis&rdquo; and &ldquo;downloader&rdquo; that can be used to target a single emoji. What we&rsquo;re intesrested in is in the <code>img</code> tag, which has the <code>src</code> attribute, this attribute is used to specify the URL to the actual image. If we copy the <code>src</code> value and pase it on the address bar we get this:</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 405; 
+			flex-basis: 972px"
+	>
+	<a href="/p/scrape-emojis-for-slack/img/09-emoji-url.png" data-size="1588x392">
+		<img src="/p/scrape-emojis-for-slack/img/09-emoji-url.png"
+			width="1588"
+			height="392"
+			srcset="/p/scrape-emojis-for-slack/img/09-emoji-url_hu4b4831a20e5b05015d5c21190113af1c_302307_480x0_resize_box_3.png 480w, /p/scrape-emojis-for-slack/img/09-emoji-url_hu4b4831a20e5b05015d5c21190113af1c_302307_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Emoji URL">
+	</a>
+	
+	<figcaption>Emoji URL</figcaption>
+	
+</figure></p>
+<p>Alright! Now that we know what we need let&rsquo;s code it up. We&rsquo;ll be using the <code>read_html</code> function to read the page, <code>html_elements</code> to extract elements using selectors, and <code>html_attr</code> to extract the emoji url.</p>
+<script src="https://gist.github.com/keanrawr/9c7ca96057b6e9209bbb440aa662fc30.js?file=step-2.r"></script>
+<p>If we execute this code snippet we can verify the result we&rsquo;re getting is what&rsquo;s expected.</p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 432; 
+			flex-basis: 1039px"
+	>
+	<a href="/p/scrape-emojis-for-slack/img/10-emoji-url.png" data-size="1524x352">
+		<img src="/p/scrape-emojis-for-slack/img/10-emoji-url.png"
+			width="1524"
+			height="352"
+			srcset="/p/scrape-emojis-for-slack/img/10-emoji-url_hudfe5ec68b28cf16e7be91be2002c3264_157131_480x0_resize_box_3.png 480w, /p/scrape-emojis-for-slack/img/10-emoji-url_hudfe5ec68b28cf16e7be91be2002c3264_157131_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="Emoji links">
+	</a>
+	
+	<figcaption>Emoji links</figcaption>
+	
+</figure></p>
+<blockquote>
+<p>📝 We could also leverage a browser extension like <a class="link" href="https://chrome.google.com/webstore/detail/css-selector/dobcgekgcmhjmfahepgbpmiaejlpaalc?hl=en"  target="_blank" rel="noopener"
+    >CSS selector</a>, but I find them to be redundant. There are cases when your target might be so complex that using an extension to find the correct selector is beneficial, but in my experience, those cases are the exceptions rather than the rule</p>
+</blockquote>
+<h2 id="save-the-emojis-locally">Save the emojis locally</h2>
+<p>The only missing puzzle piece is a way to save our emoji files locally. Fortunatelly for us, R has a built-in <code>download.file</code> method that we can use. This method only requires the URL and the destination for the file to be saved, we already have the URLs, we now need to define the destination. Since I&rsquo;m really bad at regex and R&rsquo;s regex support doesn&rsquo;t make it any easier for me, we&rsquo;ll use the <code>stringr</code> package.</p>
+<script src="https://gist.github.com/keanrawr/9c7ca96057b6e9209bbb440aa662fc30.js?file=step-3.r"></script>
+<p>Now we can put everything together!</p>
+<script src="https://gist.github.com/keanrawr/9c7ca96057b6e9209bbb440aa662fc30.js?file=scrape-emojis.r"></script>
+<p>And that&rsquo;s it! With less than 30 lines of R code we were able to download a bunch of meow emojis that are ready to be dropped in some slack converstations with my coworkers.</p>
+<h2 id="optional-add-them-to-a-slack-workspace">(Optional) Add them to a slack workspace</h2>
+<p>Once we have all our files downloaded we can add them to our slack workspace. Slack doesn&rsquo;t provide support for bulk uploads out of the box, but we can use the <a class="link" href="https://chrome.google.com/webstore/detail/neutral-face-emoji-tools/anchoacphlfbdomdlomnbbfhcmcdmjej"  target="_blank" rel="noopener"
+    >Neutral Face Emoji Tools</a> browser extension to help with that. If you&rsquo;re going to be using the extension, I recommend to not upload more than 20 emojis at a time, or you&rsquo;ll hit a limit on the number of emojis to upload. Any emojis that don&rsquo;t go through, can be easily identified and retry to upload.</p>
+<h2 id="final-thoughs">Final thoughs</h2>
+<p>Hope this small tutorial helps anyone other than future me for reference on downloading emoji packs. I&rsquo;m working on putting together a more complex use case of WS to scrape a dataset to use in an actual analysis. Until then, see you around.</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/r/">r</a>
+        
+            <a href="/tags/web-scraping/">web scraping</a>
+        
+            <a href="/tags/slack/">slack</a>
+        
+            <a href="/tags/emojis/">emojis</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "keanrawr" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2021 - 
+        
+        2023 Kean Rawr
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#what-is-web-scraping">What is web scraping?</a></li>
+    <li><a href="#what-well-be-doing">What we&rsquo;ll be doing</a></li>
+    <li><a href="#idetify-the-target-urls">Idetify the target URL(s)</a></li>
+    <li><a href="#identify-the-selector-to-the-emojis">Identify the selector to the emojis</a></li>
+    <li><a href="#save-the-emojis-locally">Save the emojis locally</a></li>
+    <li><a href="#optional-add-them-to-a-slack-workspace">(Optional) Add them to a slack workspace</a></li>
+    <li><a href="#final-thoughs">Final thoughs</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

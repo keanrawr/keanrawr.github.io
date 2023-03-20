@@ -2,22 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</loc>
-    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
+    <loc>https://keanrawr.github.io/tags/emojis/</loc>
+    <lastmod>2023-03-19T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://keanrawr.github.io/</loc>
+    <lastmod>2023-03-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://keanrawr.github.io/post/</loc>
+    <lastmod>2023-03-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://keanrawr.github.io/tags/r/</loc>
+    <lastmod>2023-03-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://keanrawr.github.io/p/scrape-emojis-for-slack/</loc>
+    <lastmod>2023-03-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://keanrawr.github.io/tags/slack/</loc>
+    <lastmod>2023-03-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://keanrawr.github.io/tags/</loc>
+    <lastmod>2023-03-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://keanrawr.github.io/tags/web-scraping/</loc>
+    <lastmod>2023-03-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://keanrawr.github.io/p/hosting-mlflow-on-raspberry-pi-behind-nginx/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://keanrawr.github.io/tags/machine-learning/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://keanrawr.github.io/post/</loc>
-    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://keanrawr.github.io/tags/raspberrypi/</loc>
-    <lastmod>2022-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://keanrawr.github.io/tags/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://keanrawr.github.io/about/</loc>
